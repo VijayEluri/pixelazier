@@ -90,7 +90,6 @@ public class ImageFilterController {
 
     /**
      * Open a file and load the image.
-     * TODO: implement open file method properly with model
      */
     public void openFile() {
         chooser.setCurrentDirectory(new File("."));
@@ -103,6 +102,8 @@ public class ImageFilterController {
             BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null),
                     BufferedImage.TYPE_INT_RGB);
             image.getGraphics().drawImage(img, 0, 0, null);
+            imgFilter.clearLayers();
+            imgFilter.addLayer(image);
         }
         catch (IOException e) {
             JOptionPane.showMessageDialog(window, e);

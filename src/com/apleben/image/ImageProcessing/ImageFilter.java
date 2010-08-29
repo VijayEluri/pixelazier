@@ -44,6 +44,11 @@ public final class ImageFilter {
         return imageLayer.remove(layerNum--);
     }
 
+    public void clearLayers() {
+        imageLayer.clear();
+        layerNum = 0;
+    }
+
     //return buffered image with defensive copy to protect instead mutation from external source
     public BufferedImage getImage() {
         Image img = imageLayer.get(layerNum);
