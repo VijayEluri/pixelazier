@@ -112,28 +112,45 @@ public class ImageFilterController {
     }
 
 
+
+
     public BufferedImage getImage() {
         return imgFilter.getImage();
     }
+//
+//    public void addLayer(BufferedImage img) {
+//        imgFilter.addLayer(img);
+//    }
+//
+//    public BufferedImage undoLayer() {
+//        return imgFilter.undoLayer();
+//    }
 
-    public void addLayer(BufferedImage img) {
-        imgFilter.addLayer(img);
-    }
 
-    public BufferedImage undoLayer() {
-        return imgFilter.undoLayer();
-    }
-
-
-
+    /**
+     * Apply a filter and repaint.
+     *
+     * @param imageOp the image operation to apply
+     */
     private void filter(BufferedImageOp imageOp) {
+        BufferedImage image = imgFilter.getImage();
 
+        if (image == null) return;
+        image = imageOp.filter(image, null);
+        imgFilter.addLayer(image);
+        window.repaint();
     }
 
+    /**
+     * Apply a convolution and repaint.
+     *
+     * @param elements the convolution kernel (an array of 9 matrix elements)
+     */
     private void convolve(float[] elements) {
-
+        Kernel kernel = new Kernel(3, 3, elements);
+        ConvolveOp op = new ConvolveOp(kernel);
+        filter(op);
     }
-
 
     private final JFileChooser chooser = new JFileChooser();
     private final ImageFilter imgFilter;
