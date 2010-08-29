@@ -19,8 +19,122 @@
 
 package com.apleben.image.ImageProcessing;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.*;
+import java.io.File;
+import java.io.IOException;
+
 /**
+ * The Controller
+ *
  * @author apupeikis
  */
 public class ImageFilterController {
+    public ImageFilterController(ImageFilter imgFilter) {
+        this.imgFilter = imgFilter;
+    }
+
+    public void setWindow(Window window) {
+        this.window = window;
+    }
+
+    public void blurFilter() {
+        float weight = 1.0f / 9.0f;
+        float[] elements = new float[9];
+        for (int i = 0; i < 9; i++)
+            elements[i] = weight;
+        convolve(elements);
+    }
+
+    public void sharpenFilter() {
+        float[] elements = {0.0f, -1.0f, 0.0f, -1.0f, 5.f, -1.0f, 0.0f, -1.0f, 0.0f};
+        convolve(elements);
+    }
+
+    public void brightenFilter() {
+        float a = 1.1f;
+        // float b = 20.0f;
+        float b = 0;
+        RescaleOp op = new RescaleOp(a, b, null);
+        filter(op);
+    }
+
+    public void edgeDetectFilter() {
+        float[] elements = {0.0f, -1.0f, 0.0f, -1.0f, 4.f, -1.0f, 0.0f, -1.0f, 0.0f};
+        convolve(elements);
+    }
+
+    public void negativeFilter() {
+        short[] negative = new short[256];
+        for (int i = 0; i < 256; i++)
+            negative[i] = (short) (255 - i);
+        ShortLookupTable table = new ShortLookupTable(0, negative);
+        LookupOp op = new LookupOp(table, null);
+        filter(op);
+    }
+
+    public void rotationFilter() {
+        BufferedImage image = imgFilter.getImage();
+
+        if (image == null) return;
+        AffineTransform transform = AffineTransform.getRotateInstance(Math.toRadians(5),
+                image.getWidth() / 2, image.getHeight() / 2);
+        AffineTransformOp op = new AffineTransformOp(transform,
+                AffineTransformOp.TYPE_BICUBIC);
+        filter(op);
+    }
+
+    /**
+     * Open a file and load the image.
+     * TODO: implement open file method properly with model
+     */
+    public void openFile() {
+        chooser.setCurrentDirectory(new File("."));
+        String[] extensions = ImageIO.getReaderFileSuffixes();
+        chooser.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
+        if (chooser.showOpenDialog(window) != JFileChooser.APPROVE_OPTION) return;
+
+        try {
+            Image img = ImageIO.read(chooser.getSelectedFile());
+            BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null),
+                    BufferedImage.TYPE_INT_RGB);
+            image.getGraphics().drawImage(img, 0, 0, null);
+        }
+        catch (IOException e) {
+            JOptionPane.showMessageDialog(window, e);
+        }
+        window.repaint();
+    }
+
+
+    public BufferedImage getImage() {
+        return imgFilter.getImage();
+    }
+
+    public void addLayer(BufferedImage img) {
+        imgFilter.addLayer(img);
+    }
+
+    public BufferedImage undoLayer() {
+        return imgFilter.undoLayer();
+    }
+
+
+
+    private void filter(BufferedImageOp imageOp) {
+
+    }
+
+    private void convolve(float[] elements) {
+
+    }
+
+
+    private final JFileChooser chooser = new JFileChooser();
+    private final ImageFilter imgFilter;
+    private Window window;
 }

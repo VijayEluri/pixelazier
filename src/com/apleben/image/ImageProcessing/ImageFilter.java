@@ -19,12 +19,14 @@
 
 package com.apleben.image.ImageProcessing;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * The Model
+ *
  * @author apupeikis
  */
 public final class ImageFilter {
@@ -39,11 +41,16 @@ public final class ImageFilter {
 
     public BufferedImage undoLayer() {
         if(layerNum == 0) return null;
-        return imageLayer.remove(layerNum);
+        return imageLayer.remove(layerNum--);
     }
 
+    //return buffered image with defensive copy to protect instead mutation from external source
     public BufferedImage getImage() {
-        return imageLayer.get(layerNum);
+        Image img = imageLayer.get(layerNum);
+        BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null),
+                    BufferedImage.TYPE_INT_RGB);
+        image.getGraphics().drawImage(img, 0, 0, null);
+        return image;
     }
 
     private List<BufferedImage> imageLayer = new ArrayList<BufferedImage>();
