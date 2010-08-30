@@ -33,7 +33,7 @@ import java.io.IOException;
  *
  * @author apupeikis
  */
-public class ImageFilterController {
+public final class ImageFilterController {
     public ImageFilterController(ImageFilter imgFilter) {
         this.imgFilter = imgFilter;
     }
