@@ -26,6 +26,7 @@ import com.explodingpixels.macwidgets.UnifiedToolBar;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.beans.EventHandler;
 
 /**
@@ -40,7 +41,7 @@ public final class ImageFilterView {
      * @param controller is the ImageFilter controller introduced to perform any operations on view
      * @return the JFrame component initialized with any required content components
      */
-    public static JFrame create(ImageFilterController controller) {
+    public static JFrame create(final ImageFilterController controller) {
         JFrame frame = new JFrame();
 
 
@@ -104,10 +105,15 @@ public final class ImageFilterView {
         //initializing the frame with MAC OS X Leopard style
         toolBar.installWindowDraggerOnWindow(frame);
         MacUtils.makeWindowLeopardStyle(frame.getRootPane());
+
         frame.add(toolBar.getComponent(), BorderLayout.NORTH);
-
-
-
+        frame.add(new JComponent() {
+            @Override
+            public void paintComponent(Graphics g) {
+                BufferedImage image = controller.getImage();
+                if (image != null) g.drawImage(image, 0, 0, null);
+            }
+        }, BorderLayout.CENTER);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("ImageProcessingDemo");
