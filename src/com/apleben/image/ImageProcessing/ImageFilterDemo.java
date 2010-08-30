@@ -19,8 +19,37 @@
 
 package com.apleben.image.ImageProcessing;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 /**
+ * This program demonstrates various image processing operations.
+ *
  * @author apupeikis
  */
-public class ImageFilterDemo {
+public final class ImageFilterDemo {
+
+    public static void main(String[] args) {
+        try {
+            Image img = ImageIO.read(new File("src/com/apleben/image/ImageProcessing/images/sa24.jpg"));
+
+            image = new BufferedImage(img.getWidth(null), img.getHeight(null),
+                    BufferedImage.TYPE_INT_RGB);
+            image.getGraphics().drawImage(img, 0, 0, null);
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+        ImageFilter imgFilter = new ImageFilter(image);
+        ImageFilterController controller = new ImageFilterController(imgFilter);
+        JFrame view = ImageFilterView.create(controller);
+        view.setLocationRelativeTo(null);
+        view.setVisible(true);
+    }
+
+    private static BufferedImage image;
 }

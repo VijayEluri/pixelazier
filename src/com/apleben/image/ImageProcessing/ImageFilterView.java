@@ -113,19 +113,19 @@ public final class ImageFilterView {
 
         //creating an icons for unified toolbar buttons
         Icon blurIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/blur.png"));
+                "com/apleben/image/ImageProcessing/images/blur.png"));
         Icon brightenIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/brighten.png"));
+                "com/apleben/image/ImageProcessing/images/brighten.png"));
         Icon edgeDetectIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/edge_detection.png"));
+                "com/apleben/image/ImageProcessing/images/edge_detection.png"));
         Icon negativeIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/invert.png"));
+                "com/apleben/image/ImageProcessing/images/invert.png"));
         Icon openImageIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/open_image.png"));
+                "com/apleben/image/ImageProcessing/images/open_image.png"));
         Icon rotationIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/rotation-mode.png"));
+                "com/apleben/image/ImageProcessing/images/rotation-mode.png"));
         Icon sharpenIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/sharpen.png"));
+                "com/apleben/image/ImageProcessing/images/sharpen.png"));
 
         //creating a buttons for unified toolbar
         AbstractButton blurButton = MacButtonFactory.makeUnifiedToolBarButton(
