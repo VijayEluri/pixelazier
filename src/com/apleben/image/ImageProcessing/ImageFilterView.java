@@ -44,6 +44,49 @@ public final class ImageFilterView {
     public static JFrame create(final ImageFilterController controller) {
         JFrame frame = new JFrame();
 
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem openItem = new JMenuItem("Open");
+        openItem.addActionListener(EventHandler.create(ActionListener.class, controller, "openFile"));
+        fileMenu.add(openItem);
+
+        JMenuItem exitItem = new JMenuItem("Exit");
+        exitItem.addActionListener(EventHandler.create(ActionListener.class, controller, "exitWindow"));
+        fileMenu.add(exitItem);
+
+        JMenu editMenu = new JMenu("Edit");
+
+
+        JMenu filterMenu = new JMenu("Filters");
+        JMenuItem blurItem = new JMenuItem("Blur");
+        blurItem.addActionListener(EventHandler.create(ActionListener.class, controller, "blurFilter"));
+        filterMenu.add(blurItem);
+
+        JMenuItem sharpenItem = new JMenuItem("Sharpen");
+        sharpenItem.addActionListener(EventHandler.create(ActionListener.class, controller, "sharpenFilter"));
+        filterMenu.add(sharpenItem);
+
+        JMenuItem brightenItem = new JMenuItem("Brighten");
+        brightenItem.addActionListener(EventHandler.create(ActionListener.class, controller, "brightenFilter"));
+        filterMenu.add(brightenItem);
+
+        JMenuItem edgeDetectItem = new JMenuItem("Edge detect");
+        edgeDetectItem.addActionListener(EventHandler.create(ActionListener.class, controller, "edgeDetectFilter"));
+        filterMenu.add(edgeDetectItem);
+
+        JMenuItem negativeItem = new JMenuItem("Negative");
+        negativeItem.addActionListener(EventHandler.create(ActionListener.class, controller, "negativeFilter"));
+        filterMenu.add(negativeItem);
+
+        JMenuItem rotateItem = new JMenuItem("Rotate");
+        rotateItem.addActionListener(EventHandler.create(ActionListener.class, controller, "rotationFilter"));
+        filterMenu.add(rotateItem);
+
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(fileMenu);
+        menuBar.add(editMenu);
+        menuBar.add(filterMenu);
+        frame.setJMenuBar(menuBar);
+
 
         //creating an icons for unified toolbar buttons
         Icon blurIcon = new ImageIcon(ImageFilterView.class.getResource(

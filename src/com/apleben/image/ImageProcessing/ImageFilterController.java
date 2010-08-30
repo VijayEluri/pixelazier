@@ -111,7 +111,9 @@ public final class ImageFilterController {
         window.repaint();
     }
 
-
+    public void exitWindow() {
+        System.exit(0);
+    }
 
 
     public BufferedImage getImage() {
