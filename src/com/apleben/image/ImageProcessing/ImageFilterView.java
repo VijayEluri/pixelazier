@@ -45,42 +45,63 @@ public final class ImageFilterView {
         JFrame frame = new JFrame();
 
         JMenu fileMenu = new JMenu("File");
+        fileMenu.setMnemonic('F');
         JMenuItem openItem = new JMenuItem("Open");
         openItem.addActionListener(EventHandler.create(ActionListener.class, controller, "openFile"));
+        openItem.setMnemonic('O');
+        openItem.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
         fileMenu.add(openItem);
 
         JMenuItem exitItem = new JMenuItem("Exit");
         exitItem.addActionListener(EventHandler.create(ActionListener.class, controller, "exitWindow"));
+        exitItem.setMnemonic('x');
+        exitItem.setAccelerator(KeyStroke.getKeyStroke("ctrl Q"));
         fileMenu.add(exitItem);
 
         JMenu editMenu = new JMenu("Edit");
+        editMenu.setMnemonic('E');
         JMenuItem undoItem = new JMenuItem("Undo Layer");
         undoItem.addActionListener(EventHandler.create(ActionListener.class, controller, "undoLayer"));
+        undoItem.setMnemonic('U');
+        undoItem.setAccelerator(KeyStroke.getKeyStroke("ctrl Z"));
         editMenu.add(undoItem);
 
         JMenu filterMenu = new JMenu("Filters");
+        filterMenu.setMnemonic('t');
         JMenuItem blurItem = new JMenuItem("Blur");
         blurItem.addActionListener(EventHandler.create(ActionListener.class, controller, "blurFilter"));
+        blurItem.setMnemonic('B');
+        blurItem.setAccelerator(KeyStroke.getKeyStroke("ctrl B"));
         filterMenu.add(blurItem);
 
         JMenuItem sharpenItem = new JMenuItem("Sharpen");
         sharpenItem.addActionListener(EventHandler.create(ActionListener.class, controller, "sharpenFilter"));
+        sharpenItem.setMnemonic('S');
+        sharpenItem.setAccelerator(KeyStroke.getKeyStroke("ctrl H"));
         filterMenu.add(sharpenItem);
 
         JMenuItem brightenItem = new JMenuItem("Brighten");
         brightenItem.addActionListener(EventHandler.create(ActionListener.class, controller, "brightenFilter"));
+        brightenItem.setMnemonic('i');
+        brightenItem.setAccelerator(KeyStroke.getKeyStroke("ctrl I"));
         filterMenu.add(brightenItem);
 
         JMenuItem edgeDetectItem = new JMenuItem("Edge detect");
         edgeDetectItem.addActionListener(EventHandler.create(ActionListener.class, controller, "edgeDetectFilter"));
+        edgeDetectItem.setMnemonic('d');
+        edgeDetectItem.setAccelerator(KeyStroke.getKeyStroke("ctrl D"));
         filterMenu.add(edgeDetectItem);
 
         JMenuItem negativeItem = new JMenuItem("Negative");
         negativeItem.addActionListener(EventHandler.create(ActionListener.class, controller, "negativeFilter"));
+        negativeItem.setMnemonic('N');
+        negativeItem.setAccelerator(KeyStroke.getKeyStroke("ctrl N"));
         filterMenu.add(negativeItem);
 
         JMenuItem rotateItem = new JMenuItem("Rotate");
         rotateItem.addActionListener(EventHandler.create(ActionListener.class, controller, "rotationFilter"));
+        rotateItem.setMnemonic('R');
+        rotateItem.setAccelerator(KeyStroke.getKeyStroke("ctrl R"));
         filterMenu.add(rotateItem);
 
         JMenuBar menuBar = new JMenuBar();

@@ -119,13 +119,10 @@ public final class ImageFilterController {
     public BufferedImage getImage() {
         return imgFilter.getImage();
     }
-//
-//    public void addLayer(BufferedImage img) {
-//        imgFilter.addLayer(img);
-//    }
 
-    public BufferedImage undoLayer() {
-        return imgFilter.undoLayer();
+    public void undoLayer() {
+        imgFilter.undoLayer();
+        window.repaint();
     }
 
 
