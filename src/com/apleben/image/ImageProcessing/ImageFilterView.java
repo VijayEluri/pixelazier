@@ -19,6 +19,7 @@
 
 package com.apleben.image.ImageProcessing;
 
+import com.apleben.utils.common.Utils;
 import com.explodingpixels.macwidgets.MacButtonFactory;
 import com.explodingpixels.macwidgets.MacUtils;
 import com.explodingpixels.macwidgets.UnifiedToolBar;
@@ -42,7 +43,7 @@ public final class ImageFilterView {
      * @return the JFrame component initialized with any required content components
      */
     public static JFrame create(final ImageFilterController controller) {
-        JFrame frame = new JFrame();
+        final JFrame frame = new JFrame();
 
         JMenu fileMenu = new JMenu("File");
         fileMenu.setMnemonic('F');
@@ -112,48 +113,43 @@ public final class ImageFilterView {
 
 
         //creating an icons for unified toolbar buttons
-        Icon blurIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/images/blur.png"));
-        Icon brightenIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/images/brighten.png"));
-        Icon edgeDetectIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/images/edge_detection.png"));
-        Icon negativeIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/images/invert.png"));
-        Icon openImageIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/images/open_image.png"));
-        Icon rotationIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/images/rotation-mode.png"));
-        Icon sharpenIcon = new ImageIcon(ImageFilterView.class.getResource(
-                "com/apleben/image/ImageProcessing/images/sharpen.png"));
+        String imageDir = "../../image/ImageProcessing/images/";
+
+        Icon blurIcon = Utils.createImageIcon(imageDir + "blur.png", "Blur");
+        Icon brightenIcon = Utils.createImageIcon(imageDir + "brighten.png", "Brighten");
+        Icon edgeDetectIcon = Utils.createImageIcon(imageDir + "edge_detection.png", "Edge Detection");
+        Icon negativeIcon = Utils.createImageIcon(imageDir + "invert.png", "Negative");
+        Icon openImageIcon = Utils.createImageIcon(imageDir + "open_image.png", "Open Image");
+        Icon rotationIcon = Utils.createImageIcon(imageDir + "rotation-mode.png", "Rotation");
+        Icon sharpenIcon = Utils.createImageIcon(imageDir + "sharpen.png", "Sharpen");
 
         //creating a buttons for unified toolbar
         AbstractButton blurButton = MacButtonFactory.makeUnifiedToolBarButton(
-                new JButton("Blur Filter", blurIcon));
+                new JButton("Blur", blurIcon));
         blurButton.addActionListener(EventHandler.create(ActionListener.class, controller, "blurFilter"));
 
         AbstractButton brightenButton = MacButtonFactory.makeUnifiedToolBarButton(
-                new JButton("Brighten Filter", brightenIcon));
+                new JButton("Brighten", brightenIcon));
         brightenButton.addActionListener(EventHandler.create(ActionListener.class, controller, "brightenFilter"));
 
         AbstractButton edgeDetectButton = MacButtonFactory.makeUnifiedToolBarButton(
-                new JButton("Edge Detection Filter", edgeDetectIcon));
+                new JButton("Edge Detection", edgeDetectIcon));
         edgeDetectButton.addActionListener(EventHandler.create(ActionListener.class, controller, "edgeDetectFilter"));
 
         AbstractButton negativeButton = MacButtonFactory.makeUnifiedToolBarButton(
-                new JButton("Negative Filter", negativeIcon));
+                new JButton("Negative", negativeIcon));
         negativeButton.addActionListener(EventHandler.create(ActionListener.class, controller, "negativeFilter"));
 
         AbstractButton openImageButton = MacButtonFactory.makeUnifiedToolBarButton(
-                new JButton("Open Image File", openImageIcon));
+                new JButton("Open Image", openImageIcon));
         openImageButton.addActionListener(EventHandler.create(ActionListener.class, controller, "openFile"));
 
         AbstractButton rotationButton = MacButtonFactory.makeUnifiedToolBarButton(
-                new JButton("Rotation Filter", rotationIcon));
+                new JButton("Rotation", rotationIcon));
         rotationButton.addActionListener(EventHandler.create(ActionListener.class, controller, "rotationFilter"));
 
         AbstractButton sharpenButton = MacButtonFactory.makeUnifiedToolBarButton(
-                new JButton("Sharpen Filter", sharpenIcon));
+                new JButton("Sharpen", sharpenIcon));
         sharpenButton.addActionListener(EventHandler.create(ActionListener.class, controller, "sharpenFilter"));
 
         //constructing the mac unified toolbar
@@ -177,7 +173,19 @@ public final class ImageFilterView {
             @Override
             public void paintComponent(Graphics g) {
                 BufferedImage image = controller.getImage();
-                if (image != null) g.drawImage(image, 0, 0, null);
+                if (image != null) {
+                    Rectangle bounds = frame.getBounds();
+                    Graphics2D g2 = (Graphics2D) g;
+                    g2.setColor(Color.BLACK);
+                    g2.fillRect(0, 0, bounds.width, bounds.height);
+                    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                            RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+                    g2.drawImage(image,
+                            (bounds.width - image.getWidth()) / 2,
+                            (bounds.height - image.getHeight()) / 2, null);
+                    g2.dispose();
+                }
             }
         }, BorderLayout.CENTER);
 
@@ -189,6 +197,6 @@ public final class ImageFilterView {
         return frame;
     }
 
-    private static final int DEFAULT_WIDTH = 500;
-    private static final int DEFAULT_HEIGHT = 500;
+    private static final int DEFAULT_WIDTH = 750;
+    private static final int DEFAULT_HEIGHT = 750;
 }

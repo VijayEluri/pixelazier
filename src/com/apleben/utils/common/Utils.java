@@ -29,7 +29,7 @@ public final class Utils {
         throw new AssertionError();
     }
 
-    protected static ImageIcon createImageIcon(String path, String description) {
+    public static ImageIcon createImageIcon(String path, String description) {
         java.net.URL imgURL = Utils.class.getResource(path);
         if (imgURL != null) {
             return new ImageIcon(imgURL, description);
