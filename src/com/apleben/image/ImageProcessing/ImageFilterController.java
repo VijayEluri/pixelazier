@@ -123,10 +123,10 @@ public final class ImageFilterController {
 //    public void addLayer(BufferedImage img) {
 //        imgFilter.addLayer(img);
 //    }
-//
-//    public BufferedImage undoLayer() {
-//        return imgFilter.undoLayer();
-//    }
+
+    public BufferedImage undoLayer() {
+        return imgFilter.undoLayer();
+    }
 
 
     /**

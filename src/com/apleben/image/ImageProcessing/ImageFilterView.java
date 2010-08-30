@@ -54,7 +54,9 @@ public final class ImageFilterView {
         fileMenu.add(exitItem);
 
         JMenu editMenu = new JMenu("Edit");
-
+        JMenuItem undoItem = new JMenuItem("Undo Layer");
+        undoItem.addActionListener(EventHandler.create(ActionListener.class, controller, "undoLayer"));
+        editMenu.add(undoItem);
 
         JMenu filterMenu = new JMenu("Filters");
         JMenuItem blurItem = new JMenuItem("Blur");
