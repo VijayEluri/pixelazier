@@ -29,7 +29,7 @@ import java.io.File;
  *
  * @author apupeikis
  */
-class FileIconView extends FileView {
+public class FileIconView extends FileView {
     /**
      * Constructs a FileIconView.
      *

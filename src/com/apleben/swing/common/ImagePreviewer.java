@@ -30,7 +30,7 @@ import java.io.File;
  *
  * @author apupeikis
  */
-class ImagePreviewer extends JLabel {
+public final class ImagePreviewer extends JLabel {
     /**
      * Constructs an ImagePreviewer.
      *

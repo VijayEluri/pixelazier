@@ -19,6 +19,10 @@
 
 package com.apleben.image.ImageProcessing;
 
+import com.apleben.swing.common.FileIconView;
+import com.apleben.swing.common.ImagePreviewer;
+import com.apleben.utils.common.Utils;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -36,6 +40,19 @@ import java.io.IOException;
 public final class ImageFilterController {
     public ImageFilterController(ImageFilter imgFilter) {
         this.imgFilter = imgFilter;
+
+        // set up file chooser
+        String imageDir = "../../swing/common/images/";
+        chooser = new JFileChooser();
+        String[] extensions = ImageIO.getReaderFileSuffixes();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", extensions);
+        chooser.setFileFilter(filter);
+        chooser.setDialogTitle("Select an image files");
+        chooser.setAccessory(new ImagePreviewer(chooser));
+        ImageIcon fullImage = Utils.createImageIcon(imageDir + "jpg.png", "Image Icon");
+        chooser.setFileView(new FileIconView(filter,
+                new ImageIcon(Utils.getScaledIcon(fullImage.getImage(), 32, 32))));
+        chooser.setAcceptAllFileFilterUsed(false);
     }
 
     public void setWindow(Window window) {
@@ -93,8 +110,7 @@ public final class ImageFilterController {
      */
     public void openFile() {
         chooser.setCurrentDirectory(new File("."));
-        String[] extensions = ImageIO.getReaderFileSuffixes();
-        chooser.setFileFilter(new FileNameExtensionFilter("Image files", extensions));
+
         if (chooser.showOpenDialog(window) != JFileChooser.APPROVE_OPTION) return;
 
         try {
@@ -151,7 +167,7 @@ public final class ImageFilterController {
         filter(op);
     }
 
-    private final JFileChooser chooser = new JFileChooser();
+    private final JFileChooser chooser;
     private final ImageFilter imgFilter;
     private Window window;
 }
