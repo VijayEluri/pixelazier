@@ -65,7 +65,8 @@ public final class Utils {
     public static ImageIcon createImageIcon(String path, String description) {
         java.net.URL imgURL = Utils.class.getResource(path);
         if (imgURL != null) {
-            return new ImageIcon(imgURL, description);
+            Image img = Toolkit.getDefaultToolkit().getImage(imgURL);
+            return new ImageIcon(img, description);
         } else {
             System.err.println("Couldn't find file: " + path);
             System.err.println("With description: " + description);

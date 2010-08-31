@@ -19,12 +19,11 @@
 
 package com.apleben.image.ImageProcessing;
 
-import javax.imageio.ImageIO;
+import com.apleben.utils.common.Utils;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * This program demonstrates various image processing operations.
@@ -38,11 +37,13 @@ public final class ImageFilterDemo {
             public void run() {
                 try {
                     UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-                    Image img = ImageIO.read(new File("src/com/apleben/image/ImageProcessing/images/sa24.jpg"));
 
-                    image = new BufferedImage(img.getWidth(null), img.getHeight(null),
+                    String imageDir = "/com/apleben/image/ImageProcessing/images/";
+                    ImageIcon img = Utils.createImageIcon(imageDir + "sa24.jpg", "Image Icon");
+
+                    image = new BufferedImage(img.getIconWidth(), img.getIconHeight(),
                             BufferedImage.TYPE_INT_RGB);
-                    image.getGraphics().drawImage(img, 0, 0, null);
+                    image.getGraphics().drawImage(img.getImage(), 0, 0, null);
                 } catch (ClassNotFoundException e) {
                     System.err.println("Couldn't find class for specified look and feel:"
                             + "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -63,8 +64,6 @@ public final class ImageFilterDemo {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, e);
                 }
 
                 ImageFilter imgFilter = new ImageFilter(image);

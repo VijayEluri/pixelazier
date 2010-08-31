@@ -42,7 +42,7 @@ public final class ImageFilterController {
         this.imgFilter = imgFilter;
 
         // set up file chooser
-        String imageDir = "../../swing/common/images/";
+        String imageDir = "/com/apleben/swing/common/images/";
         chooser = new JFileChooser();
         String[] extensions = ImageIO.getReaderFileSuffixes();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", extensions);

@@ -113,7 +113,7 @@ public final class ImageFilterView {
 
 
         //creating an icons for unified toolbar buttons
-        String imageDir = "../../image/ImageProcessing/images/";
+        String imageDir = "/com/apleben/image/ImageProcessing/images/";
 
         Icon blurIcon = Utils.createImageIcon(imageDir + "blur.png", "Blur");
         Icon brightenIcon = Utils.createImageIcon(imageDir + "brighten.png", "Brighten");
