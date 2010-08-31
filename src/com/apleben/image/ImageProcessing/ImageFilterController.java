@@ -50,8 +50,12 @@ public final class ImageFilterController {
         chooser.setDialogTitle("Select an image files");
         chooser.setAccessory(new ImagePreviewer(chooser));
         ImageIcon fullImage = Utils.createImageIcon(imageDir + "jpg.png", "Image Icon");
-        chooser.setFileView(new FileIconView(filter,
-                new ImageIcon(Utils.getScaledIcon(fullImage.getImage(), 32, 32))));
+        try {
+            chooser.setFileView(new FileIconView(filter,
+                    new ImageIcon(Utils.getScaledImage(fullImage.getImage(), 32, 32))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         chooser.setAcceptAllFileFilterUsed(false);
     }
 
