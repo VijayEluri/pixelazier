@@ -34,21 +34,46 @@ import java.io.IOException;
 public final class ImageFilterDemo {
 
     public static void main(String[] args) {
-        try {
-            Image img = ImageIO.read(new File("src/com/apleben/image/ImageProcessing/images/sa24.jpg"));
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+                    Image img = ImageIO.read(new File("src/com/apleben/image/ImageProcessing/images/sa24.jpg"));
 
-            image = new BufferedImage(img.getWidth(null), img.getHeight(null),
-                    BufferedImage.TYPE_INT_RGB);
-            image.getGraphics().drawImage(img, 0, 0, null);
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(null, e);
-        }
+                    image = new BufferedImage(img.getWidth(null), img.getHeight(null),
+                            BufferedImage.TYPE_INT_RGB);
+                    image.getGraphics().drawImage(img, 0, 0, null);
+                } catch (ClassNotFoundException e) {
+                    System.err.println("Couldn't find class for specified look and feel:"
+                            + "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+                    System.err.println("Did you include the L&F library in the class path?");
+                    System.err.println("Using the default look and feel.");
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    System.err.println("Can't use the specified look and feel ("
+                            + "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"
+                            + ") on this platform.");
+                    System.err.println("Using the default look and feel.");
+                    System.err.println("Couldn't get specified look and feel ("
+                            + "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"
+                            + "), for some reason.");
+                    System.err.println("Using the default look and feel.");
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, e);
+                }
 
-        ImageFilter imgFilter = new ImageFilter(image);
-        ImageFilterController controller = new ImageFilterController(imgFilter);
-        JFrame view = ImageFilterView.create(controller);
-        view.setLocationRelativeTo(null);
-        view.setVisible(true);
+                ImageFilter imgFilter = new ImageFilter(image);
+                ImageFilterController controller = new ImageFilterController(imgFilter);
+                JFrame view = ImageFilterView.create(controller);
+                view.setLocationRelativeTo(null);
+                view.setVisible(true);
+            }
+        });
     }
 
     private static BufferedImage image;
