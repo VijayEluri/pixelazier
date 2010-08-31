@@ -174,7 +174,12 @@ public final class ImageFilterView {
             public void paintComponent(Graphics g) {
                 BufferedImage image = controller.getImage();
                 if (image != null) {
-                    Rectangle bounds = frame.getBounds();
+                    Rectangle bounds = getBounds();
+                    try {
+                        image = Utils.getScaledImage(image, bounds.width, bounds.height);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     Graphics2D g2 = (Graphics2D) g;
                     g2.setColor(Color.BLACK);
                     g2.fillRect(0, 0, bounds.width, bounds.height);
