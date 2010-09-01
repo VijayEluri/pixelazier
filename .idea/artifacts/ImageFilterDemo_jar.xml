@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact name="ImageFilterDemo:jar">
-    <output-path>$PROJECT_DIR$/dist/ImageProcessing</output-path>
+    <output-path>$PROJECT_DIR$/bin/ImageProcessing</output-path>
     <root id="root">
       <element id="archive" name="ImageFilterDemo.jar">
         <element id="directory" name="META-INF">
