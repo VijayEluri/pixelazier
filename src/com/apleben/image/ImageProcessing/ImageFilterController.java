@@ -46,6 +46,14 @@ public final class ImageFilterController {
         chooser = new JFileChooser();
         String[] extensions = ImageIO.getReaderFileSuffixes();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Image files", extensions);
+
+//        try {
+//            service = (FileOpenService) ServiceManager.lookup("javax.jnlp.FileOpenService");
+//
+//        } catch (UnavailableServiceException e) {
+//            JOptionPane.showMessageDialog(null, e);
+//        }
+
         chooser.setFileFilter(filter);
         chooser.setDialogTitle("Select an image files");
         chooser.setAccessory(new ImagePreviewer(chooser));
@@ -116,16 +124,22 @@ public final class ImageFilterController {
         chooser.setCurrentDirectory(new File("."));
 
         if (chooser.showOpenDialog(window) != JFileChooser.APPROVE_OPTION) return;
+//        String[] extensions = ImageIO.getReaderFileSuffixes();
 
         try {
-            Image img = ImageIO.read(chooser.getSelectedFile());
-            BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null),
-                    BufferedImage.TYPE_INT_RGB);
-            image.getGraphics().drawImage(img, 0, 0, null);
-            imgFilter.clearLayers();
-            imgFilter.addLayer(image);
-        }
-        catch (IOException e) {
+//            FileContents contents = service.openFileDialog(".", extensions);
+//
+//            if (contents != null) {
+//                InputStream in = contents.getInputStream();
+//                Image img = ImageIO.read(in);
+                Image img = ImageIO.read(chooser.getSelectedFile());
+                BufferedImage image = new BufferedImage(img.getWidth(null), img.getHeight(null),
+                        BufferedImage.TYPE_INT_RGB);
+                image.getGraphics().drawImage(img, 0, 0, null);
+                imgFilter.clearLayers();
+                imgFilter.addLayer(image);
+//            }
+        } catch (IOException e) {
             JOptionPane.showMessageDialog(window, e);
         }
         window.repaint();
@@ -173,5 +187,6 @@ public final class ImageFilterController {
 
     private final JFileChooser chooser;
     private final ImageFilter imgFilter;
+//    private FileOpenService service;
     private Window window;
 }
