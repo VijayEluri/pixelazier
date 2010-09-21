@@ -9,6 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="jgoodies forms" level="project" />
     <orderEntry type="library" exported="" name="mac widgets" level="project" />
+    <orderEntry type="library" exported="" name="steel series" level="project" />
+    <orderEntry type="library" exported="" name="trident" level="project" />
   </component>
 </module>
 

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="steel series">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/SteelSeries.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="http://idisk.mac.com/han.solo-Public/SteelSeries_Doc/index.html" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
