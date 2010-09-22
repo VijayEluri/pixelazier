@@ -21,11 +21,6 @@ package com.apleben.graphics.SteelSeriesSet;
 
 import eu.hansolo.steelseries.gauges.*;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.Arrays;
-import java.util.Collection;
-
 /**
  * @author apupeikis
  */
@@ -33,80 +28,56 @@ public enum RadialGaugesLcdSet implements GaugeOperation {
     RADIAL1_LCD("Radial1Lcd") {
         @Override
         public AbstractGauge init(int w, int h) {
-            //instantiation could be more easily if method init(int w, int h);
-            //will return the reference on the gauge instance (return this;)
-            //then we could write like this {@code return new Radial1.init(w, h);}
-            //please fix it :)
-            Radial1Lcd rad1 = new Radial1Lcd();
-            rad1.init(w, h);
-            return rad1;
+            return new Radial1Lcd().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial1Lcd rad1 = new Radial1Lcd();
-            rad1.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad1;
+            return new Radial1Lcd().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL2_LCD("Radial2Lcd") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial2Lcd rad2 = new Radial2Lcd();
-            rad2.init(w, h);
-            return rad2;
+            return new Radial2Lcd().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial2Lcd rad2 = new Radial2Lcd();
-            rad2.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad2;
+            return new Radial2Lcd().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL3_LCD("Radial3Lcd") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial3Lcd rad3 = new Radial3Lcd();
-            rad3.init(w, h);
-            return rad3;
+            return new Radial3Lcd().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial3Lcd rad3 = new Radial3Lcd();
-            rad3.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad3;
+            return new Radial3Lcd().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL4_LCD("Radial4Lcd") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial4Lcd rad4 = new Radial4Lcd();
-            rad4.init(w, h);
-            return rad4;
+            return new Radial4Lcd().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial4Lcd rad4 = new Radial4Lcd();
-            rad4.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad4;
+            return new Radial4Lcd().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     DIGITAL_RADIAL_LCD("DigitalRadialLcd"){
         @Override
         public AbstractGauge init(int w, int h) {
-            DigitalRadialLcd digrad = new DigitalRadialLcd();
-            digrad.init(w, h);
-            return digrad;
+            return new DigitalRadialLcd().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            DigitalRadialLcd digrad = new DigitalRadialLcd();
-            digrad.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return digrad;
+            return new DigitalRadialLcd().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     };
 
@@ -121,25 +92,5 @@ public enum RadialGaugesLcdSet implements GaugeOperation {
 
     @Override public String toString() {
         return gaugeName;
-    }
-
-    public static void main(String... args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                test(Arrays.asList(RadialGaugesLcdSet.values()));
-            }
-        });
-    }
-
-    private static void test(Collection<? extends GaugeOperation> gaugeSet) {
-        JFrame frame = new JFrame();
-        frame.setLayout(new FlowLayout(FlowLayout.LEADING));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        for(GaugeOperation op : gaugeSet) {
-            frame.add(op.init());
-        }
-        frame.pack();
-        frame.setVisible(true);
     }
 }

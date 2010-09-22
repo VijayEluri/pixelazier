@@ -28,110 +28,78 @@ public enum RadialGaugesSet implements GaugeOperation {
     RADIAL1("Radial1") {
         @Override
         public AbstractGauge init(int w, int h) {
-            //instantiation could be more easily if method init(int w, int h);
-            //will return the reference on the gauge instance (return this;)
-            //then we could write like this {@code return new Radial1.init(w, h);}
-            //please fix it :)
-            Radial1 rad1 = new Radial1();
-            rad1.init(w, h);
-            return rad1;
+            return new Radial1().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial1 rad1 = new Radial1();
-            rad1.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad1;
+            return new Radial1().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL1_SQUARE("Radial1Square") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial1Square rad1sqr = new Radial1Square();
-            rad1sqr.init(w, h);
-            return rad1sqr;
+            return new Radial1Square().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial1Square rad1sqr = new Radial1Square();
-            rad1sqr.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad1sqr;
+            return new Radial1Square().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL1_VERTICAL("Radial1Vertical") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial1Vertical rad1ver = new Radial1Vertical();
-            rad1ver.init(w, h);
-            return rad1ver;
+            return new Radial1Vertical().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial1Vertical rad1ver = new Radial1Vertical();
-            rad1ver.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad1ver;
+            return new Radial1Vertical().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL2("Radial2") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial2 rad2 = new Radial2();
-            rad2.init(w, h);
-            return rad2;
+            return new Radial2().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial2 rad2 = new Radial2();
-            rad2.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad2;
+            return new Radial2().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL3("Radial3") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial3 rad3 = new Radial3();
-            rad3.init(w, h);
-            return rad3;
+            return new Radial3().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial3 rad3 = new Radial3();
-            rad3.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad3;
+            return new Radial3().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     RADIAL4("Radial4") {
         @Override
         public AbstractGauge init(int w, int h) {
-            Radial4 rad4 = new Radial4();
-            rad4.init(w, h);
-            return rad4;
+            return new Radial4().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            Radial4 rad4 = new Radial4();
-            rad4.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return rad4;
+            return new Radial4().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
     DIGITAL_RADIAL("DigitalRadial"){
         @Override
         public AbstractGauge init(int w, int h) {
-            DigitalRadial digrad = new DigitalRadial();
-            digrad.init(w, h);
-            return digrad;
+            return new DigitalRadial().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            DigitalRadial digrad = new DigitalRadial();
-            digrad.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-            return digrad;
+            return new DigitalRadial().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     };
 

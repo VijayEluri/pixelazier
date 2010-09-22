@@ -19,73 +19,74 @@
 
 package com.apleben.graphics.SteelSeriesSet;
 
-import eu.hansolo.steelseries.gauges.AbstractGauge;
-import eu.hansolo.steelseries.gauges.Linear;
-import eu.hansolo.steelseries.gauges.LinearLcd;
+import eu.hansolo.steelseries.gauges.*;
 
 /**
  * @author apupeikis
  */
-public enum LinearGaugesSet implements GaugeOperation {
-    LINEAR_VERTICAL("Linear_vertical") {
+public enum ExtensionGaugesSet implements GaugeOperation {
+    ALTIMETER("Altimeter") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w > h)
-                throw new IllegalArgumentException("In linear vertical width should be less than height");
-            return new Linear().init(w, h);
+            return new Altimeter().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new Linear().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            return new Altimeter().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
-    LINEAR_LCD_VERTICAL("LinearLcd_vertical") {
+    CLOCK("Clock") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w > h)
-                throw new IllegalArgumentException("In linear vertical width should be less than height");
-            return new LinearLcd().init(w, h);
+            return new Clock().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new LinearLcd().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            return new Clock().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
-    LINEAR_HORIZONTAL("Linear_horizontal") {
+    COMPASS("Compass") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w < h)
-                throw new IllegalArgumentException("In linear horizontal width should be greater than height");
-            return new Linear().init(w, h);
+            return new Compass().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new Linear().init(DEFAULT_HEIGHT, DEFAULT_WIDTH);
+            return new Compass().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
-    LINEAR_LCD_HORIZONTAL("LinearLcd_horizontal") {
+    LEVEL("Level") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w < h)
-                throw new IllegalArgumentException("In linear horizontal width should be greater than height");
-            return new LinearLcd().init(w, h);
+            return new Level().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new LinearLcd().init(DEFAULT_HEIGHT, DEFAULT_WIDTH);
+            return new Level().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+    },
+    RADAR("Radar") {
+        @Override
+        public AbstractGauge init(int w, int h) {
+            return new Radar().init(w, h);
+        }
+
+        @Override
+        public AbstractGauge init() {
+            return new Radar().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     };
 
 
     private final String gaugeName;
-    private static final int DEFAULT_WIDTH = 40;
-    private static final int DEFAULT_HEIGHT = 150;
+    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_HEIGHT = 100;
 
-    LinearGaugesSet(String gaugeName) {
+    ExtensionGaugesSet(String gaugeName) {
         this.gaugeName = gaugeName;
     }
 

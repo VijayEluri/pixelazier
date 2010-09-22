@@ -19,73 +19,63 @@
 
 package com.apleben.graphics.SteelSeriesSet;
 
-import eu.hansolo.steelseries.gauges.AbstractGauge;
-import eu.hansolo.steelseries.gauges.Linear;
-import eu.hansolo.steelseries.gauges.LinearLcd;
+import eu.hansolo.steelseries.gauges.*;
 
 /**
  * @author apupeikis
  */
-public enum LinearGaugesSet implements GaugeOperation {
-    LINEAR_VERTICAL("Linear_vertical") {
+public enum RadialBargraphGaugesSet implements GaugeOperation {
+    RADIAL_BARGRAPH1("RadialBargraph1") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w > h)
-                throw new IllegalArgumentException("In linear vertical width should be less than height");
-            return new Linear().init(w, h);
+            return new RadialBargraph1().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new Linear().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            return new RadialBargraph1().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
-    LINEAR_LCD_VERTICAL("LinearLcd_vertical") {
+    RADIAL_BARGRAPH2("RadialBargraph2") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w > h)
-                throw new IllegalArgumentException("In linear vertical width should be less than height");
-            return new LinearLcd().init(w, h);
+            return new RadialBargraph2().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new LinearLcd().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+            return new RadialBargraph2().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
-    LINEAR_HORIZONTAL("Linear_horizontal") {
+    RADIAL_BARGRAPH3("RadialBargraph3") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w < h)
-                throw new IllegalArgumentException("In linear horizontal width should be greater than height");
-            return new Linear().init(w, h);
+            return new RadialBargraph3().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new Linear().init(DEFAULT_HEIGHT, DEFAULT_WIDTH);
+            return new RadialBargraph3().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
-    LINEAR_LCD_HORIZONTAL("LinearLcd_horizontal") {
+    RADIAL_BARGRAPH4("RadialBargraph4") {
         @Override
         public AbstractGauge init(int w, int h) {
-            if(w < h)
-                throw new IllegalArgumentException("In linear horizontal width should be greater than height");
-            return new LinearLcd().init(w, h);
+            return new RadialBargraph4().init(w, h);
         }
 
         @Override
         public AbstractGauge init() {
-            return new LinearLcd().init(DEFAULT_HEIGHT, DEFAULT_WIDTH);
+            return new RadialBargraph4().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     };
 
 
     private final String gaugeName;
-    private static final int DEFAULT_WIDTH = 40;
-    private static final int DEFAULT_HEIGHT = 150;
+    private static final int DEFAULT_WIDTH = 100;
+    private static final int DEFAULT_HEIGHT = 100;
 
-    LinearGaugesSet(String gaugeName) {
+    RadialBargraphGaugesSet(String gaugeName) {
         this.gaugeName = gaugeName;
     }
 
