@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.apleben.graphics.SteelSeriesSet.ControlsPanel">
+  <grid id="27dc6" binding="controls" layout-manager="FormLayout">
+    <rowspec value="center:d:noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <rowspec value="top:4dlu:noGrow"/>
+    <rowspec value="center:max(d;4px):noGrow"/>
+    <colspec value="fill:129px:noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:126px:noGrow"/>
+    <colspec value="left:4dlu:noGrow"/>
+    <colspec value="fill:135px:noGrow"/>
+    <constraints>
+      <xy x="20" y="20" width="416" height="209"/>
+    </constraints>
+    <properties/>
+    <border type="bevel-raised" title="Controls"/>
+    <children>
+      <component id="c539e" class="javax.swing.JLabel" binding="frameDesLable">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="0" bottom="0" right="5"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="11"/>
+          <labelFor value="3de22"/>
+          <text value="Frame&#10;Design"/>
+        </properties>
+      </component>
+      <component id="5c0c5" class="javax.swing.JComboBox" binding="backgroundColor">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="19400" class="javax.swing.JLabel" binding="bgColorLabel">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="0" bottom="0" right="5"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <labelFor value="5c0c5"/>
+          <text value="Background&#10;Color"/>
+        </properties>
+      </component>
+      <component id="a6544" class="javax.swing.JLabel" binding="ptColorLabel">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="0" bottom="0" right="5"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <labelFor value="df70"/>
+          <text value="Pointer&#10;Color"/>
+        </properties>
+      </component>
+      <component id="df70" class="javax.swing.JComboBox" binding="pointerColor">
+        <constraints>
+          <grid row="4" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="7c333" class="javax.swing.JLabel" binding="lcdColorLable">
+        <constraints>
+          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="0" bottom="0" right="5"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <labelFor value="20ce7"/>
+          <text value="LCD Color"/>
+        </properties>
+      </component>
+      <component id="20ce7" class="javax.swing.JComboBox" binding="lcdColor">
+        <constraints>
+          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="b2018" class="javax.swing.JCheckBox" binding="thresholdCB">
+        <constraints>
+          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="2"/>
+          <text value="Threshold"/>
+        </properties>
+      </component>
+      <component id="320d6" class="javax.swing.JCheckBox" binding="maxMeasuredCB">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="2"/>
+          <text value="Max. measured"/>
+        </properties>
+      </component>
+      <component id="3c6a0" class="javax.swing.JCheckBox" binding="sectionCB">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="2"/>
+          <text value="Section"/>
+        </properties>
+      </component>
+      <component id="f192" class="javax.swing.JCheckBox" binding="trackSectionCB">
+        <constraints>
+          <grid row="6" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="2"/>
+          <text value="Track Section"/>
+        </properties>
+      </component>
+      <component id="37fda" class="javax.swing.JLabel" binding="tickmarkColorL">
+        <constraints>
+          <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="0" bottom="0" right="5"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <labelFor value="74d83"/>
+          <text value="Tickmark Color"/>
+        </properties>
+      </component>
+      <component id="74d83" class="javax.swing.JComboBox" binding="tickmarkColor">
+        <constraints>
+          <grid row="8" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="c007" class="javax.swing.JCheckBox" binding="animateCB">
+        <constraints>
+          <grid row="8" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <horizontalTextPosition value="2"/>
+          <text value="Animate"/>
+        </properties>
+      </component>
+      <component id="f895b" class="javax.swing.JLabel" binding="dragLabel">
+        <constraints>
+          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <forms top="0" left="0" bottom="0" right="5"/>
+        </constraints>
+        <properties>
+          <horizontalAlignment value="4"/>
+          <text value="Drag it!"/>
+        </properties>
+      </component>
+      <component id="b945" class="javax.swing.JSlider" binding="pointerSlider">
+        <constraints>
+          <grid row="10" column="2" row-span="1" col-span="3" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <forms defaultalign-horz="false"/>
+        </constraints>
+        <properties>
+          <paintLabels value="true"/>
+          <paintTicks value="true"/>
+        </properties>
+      </component>
+      <component id="3de22" class="javax.swing.JComboBox" binding="frameDesign">
+        <constraints>
+          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+          <forms/>
+        </constraints>
+        <properties/>
+      </component>
+    </children>
+  </grid>
+</form>
