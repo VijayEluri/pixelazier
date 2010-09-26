@@ -42,7 +42,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
     private JComboBox backgroundColor;
     private JComboBox pointerColor;
     private JComboBox lcdColor;
-    private JComboBox tickmarkColor;
+    private JComboBox barValueColor;
     private JCheckBox thresholdCB;
     private JCheckBox maxMeasuredCB;
     private JCheckBox sectionCB;
@@ -50,6 +50,12 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
     private JCheckBox animateCB;
     private JSlider pointerSlider;
     private JTabbedPane gaugesPane;
+
+    /**
+     * Progress GlassPane is using for reduce effect of slow initialization
+     */
+    private static final int MAX_DELAY = 500;
+    private static ProgressGlassPane glassPane;
 
     /*
      * Pointer values that animation will move between
@@ -105,16 +111,69 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
 
         pack();
         setLocationRelativeTo(null);
+        setGlassPane(glassPane = new ProgressGlassPane());
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
+    /**
+     * Lets run the Steel Series Demo
+     * @param args command line arguments....
+     */
     public static void main(String... args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SteelSeriesDemo().setVisible(true);
+                try {
+                    UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+                } catch (ClassNotFoundException e) {
+                    System.err.println("Couldn't find class for specified look and feel:"
+                            + "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+                    System.err.println("Did you include the L&F library in the class path?");
+                    System.err.println("Using the default look and feel.");
+                    e.printStackTrace();
+                } catch (UnsupportedLookAndFeelException e) {
+                    System.err.println("Can't use the specified look and feel ("
+                            + "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"
+                            + ") on this platform.");
+                    System.err.println("Using the default look and feel.");
+                    System.err.println("Couldn't get specified look and feel ("
+                            + "com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"
+                            + "), for some reason.");
+                    System.err.println("Using the default look and feel.");
+                    e.printStackTrace();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+                JFrame frame = new SteelSeriesDemo();
+                frame.setVisible(true);
+                if (frame.isVisible()) {
+                    glassPane.setVisible(true);
+                    startInitThread();
+                }
             }
         });
+    }
+
+    private static void startInitThread() {
+        Thread imitator = new Thread(new Runnable() {
+            public void run() {
+                int i = 0;
+                do {
+                    try {
+                        Thread.sleep(30 + (int) (Math.random() * MAX_DELAY));
+                    } catch (InterruptedException ignored) {
+                    }
+                    i += (int) (Math.random() * 5);
+                    glassPane.setProgress(i);
+                } while (i < 100);
+                glassPane.setVisible(false);
+                glassPane.setProgress(0);
+            }
+        });
+        imitator.start();
     }
 
     // Generic static factory method
@@ -144,23 +203,22 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             }
         });
         add(gaugesPane);
+        updateAnimated("Radial Gauges");
     }
 
     /*
-     * Loads the tab with the given index.
-     *
+     * Update animated gauges list and current gauge using for custom adjustment purposes
      */
-    private void loadTab(int n) {
-        String title = gaugesPane.getTitleAt(n);
+    private void updateAnimated(String title) {
         toAnimate.clear();
         currentGauge = null;
 
         if (title.equals("Radial Gauges")) {
             toAnimate.addAll(gaugeCache.get("Radial"));
-            currentGauge = toAnimate.remove(toAnimate.size() - 1);
+            currentGauge = toAnimate.remove(toAnimate.size() - 2);
         } else if (title.equals("Radial Lcd Gauges")) {
             toAnimate.addAll(gaugeCache.get("RadialLcd"));
-            currentGauge = toAnimate.remove(toAnimate.size() - 1);
+            currentGauge = toAnimate.remove(toAnimate.size() - 2);
         } else if (title.equals("Linear and Linear Lcd Gauges")) {
             toAnimate.addAll(gaugeCache.get("Linear"));
             currentGauge = toAnimate.remove(toAnimate.size() - 1);
@@ -172,49 +230,52 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             currentGauge = toAnimate.remove(toAnimate.size() - 1);
         } else if (title.equals("Extension Gauges")) {
             toAnimate.addAll(gaugeCache.get("Extension"));
-            currentGauge = toAnimate.remove(0);
+            currentGauge = toAnimate.remove(3);
         }
+    }
+
+    /*
+     * Loads the tab with the given index.
+     *
+     */
+    private void loadTab(int n) {
+        String title = gaugesPane.getTitleAt(n);
+
+        // updating an animated gauge list and current gauge for adjustment purposes
+        updateAnimated(title);
 
         // Lcd color chooser
         if(title.equals("Radial Lcd Gauges") || title.equals("Linear and Linear Lcd Gauges") ||
-                title.equals("Radial Bargraph Lcd Gauges")) lcdColor.setVisible(true);
-        else lcdColor.setVisible(false);
+                title.equals("Radial Bargraph Lcd Gauges")) lcdColor.setEnabled(true);
+        else lcdColor.setEnabled(false);
 
-        // threshold, min./max. measured, section and track section
-        if(title.equals("Linear and Linear Lcd Gauges") || title.equals("Extension Gauges")) {
-            thresholdCB.setVisible(false);
-            maxMeasuredCB.setVisible(false);
-            sectionCB.setVisible(false);
-            trackSectionCB.setVisible(false);
+        // section, track section, pointer/bar/value colors
+        if(title.equals("Radial Bargraph Gauges") || title.equals("Radial Bargraph Lcd Gauges") ||
+                title.equals("Linear and Linear Lcd Gauges") || title.equals("Extension Gauges")) {
+            sectionCB.setEnabled(false);
+            trackSectionCB.setEnabled(false);
+            pointerColor.setEnabled(false);
+            if(!title.equals("Extension Gauges"))
+                barValueColor.setEnabled(true);
+
         } else {
-            thresholdCB.setVisible(true);
-            maxMeasuredCB.setVisible(true);
-            sectionCB.setVisible(true);
-            trackSectionCB.setVisible(true);
+            sectionCB.setEnabled(true);
+            trackSectionCB.setEnabled(true);
+            pointerColor.setEnabled(true);
+            barValueColor.setEnabled(false);
         }
 
-        // Animate it? Tickmark?
+        // Animate it? and some one
         if(title.equals("Extension Gauges")) {
-            animateCB.setVisible(false);
-            tickmarkColor.setVisible(false);
-            pointerColor.setVisible(false);
+            maxMeasuredCB.setEnabled(false);
+            thresholdCB.setEnabled(false);
+            animateCB.setEnabled(false);
+            barValueColor.setEnabled(false);
         }
         else {
-            animateCB.setVisible(true);
-            tickmarkColor.setVisible(true);
-            pointerColor.setVisible(true);
-        }
-
-        // very complicated pointer/bar/value color definition....
-        DefaultComboBoxModel model = (DefaultComboBoxModel) pointerColor.getModel();
-        model.removeAllElements();
-        if(title.equals("Radial Gauges") || title.equals("Radial Lcd Gauges")) {
-            for(PointerColor color : pointerColors)
-                model.addElement(color);
-        } else if (title.equals("Extension Gauges")) { // just ignore that!
-        } else {
-            for(ColorDef color : defColors)
-                model.addElement(color);
+            maxMeasuredCB.setEnabled(true);
+            thresholdCB.setEnabled(true);
+            animateCB.setEnabled(true);
         }
     }
 
@@ -227,6 +288,9 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             AbstractGauge gauge = op.init();
             if (gauge instanceof Altimeter || gauge instanceof Clock ||
                     gauge instanceof Compass || gauge instanceof Level) {
+                // strange bug.. try to comment it and look what's happened
+                if(gauge instanceof Clock)
+                    gauge.setSize(50, 50);
                 gaugeList.add(gauge);
                 panel.add(gauge);
                 i++;
@@ -375,8 +439,8 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         controls.add(lcdColorLabel, new CellConstraints(1, 7, 1, 1, CellConstraints.DEFAULT,
                 CellConstraints.DEFAULT, new Insets(0, 0, 0, 5)));
         lcdColor = new JComboBox(LcdColor.values());
-        lcdColor.setVisible(false);
         lcdColor.addActionListener(this);
+        lcdColor.setEnabled(false);
         controls.add(lcdColor, cc.xy(3, 7));
         thresholdCB = new JCheckBox();
         thresholdCB.setHorizontalAlignment(4);
@@ -402,14 +466,15 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         trackSectionCB.setText("Track Section");
         trackSectionCB.addActionListener(this);
         controls.add(trackSectionCB, cc.xy(5, 7));
-        JLabel tickmarkColorL = new JLabel();
-        tickmarkColorL.setHorizontalAlignment(4);
-        tickmarkColorL.setText("Tickmark Color");
-        controls.add(tickmarkColorL, new CellConstraints(1, 9, 1, 1, CellConstraints.DEFAULT,
+        JLabel barValueColorL = new JLabel();
+        barValueColorL.setHorizontalAlignment(4);
+        barValueColorL.setText("Bar/Value Color");
+        controls.add(barValueColorL, new CellConstraints(1, 9, 1, 1, CellConstraints.DEFAULT,
                 CellConstraints.DEFAULT, new Insets(0, 0, 0, 5)));
-        tickmarkColor = new JComboBox(new String[]{"Red", "Green", "Blue", "Magenta"});
-        tickmarkColor.addActionListener(this);
-        controls.add(tickmarkColor, cc.xy(3, 9));
+        barValueColor = new JComboBox(ColorDef.values());
+        barValueColor.addActionListener(this);
+        barValueColor.setEnabled(false);
+        controls.add(barValueColor, cc.xy(3, 9));
         animateCB = new JCheckBox();
         animateCB.setHorizontalAlignment(4);
         animateCB.setHorizontalTextPosition(2);
@@ -428,7 +493,10 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             public void stateChanged(ChangeEvent e) {
                 double fraction = (double) pointerSlider.getValue();
                 fraction = Math.min(100.0, fraction);
-                ((AbstractRadial) currentGauge).setValueAnimated(fraction);
+                if(currentGauge instanceof AbstractRadial)
+                    ((AbstractRadial) currentGauge).setValueAnimated(fraction);
+                else if(currentGauge instanceof AbstractLinear)
+                    ((AbstractLinear) currentGauge).setValueAnimated(fraction);
             }
         });
         controls.add(pointerSlider, cc.xyw(3, 11, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
@@ -439,7 +507,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         bgColorLabel.setLabelFor(backgroundColor);
         ptColorLabel.setLabelFor(pointerColor);
         lcdColorLabel.setLabelFor(lcdColor);
-        tickmarkColorL.setLabelFor(tickmarkColor);
+        barValueColorL.setLabelFor(barValueColor);
         add(controls, BorderLayout.SOUTH);
     }
 
@@ -472,41 +540,31 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                 ((AbstractLinear) currentGauge).setBackgroundColor(
                         BackgroundColor.valueOf(backgroundColor.getSelectedItem().toString()));
         } else if (source.equals(pointerColor)) {
-            // changing pointer, linear bar or bar graph  color of the gauge
-            if (currentGauge instanceof AbstractRadial) {
-                if (currentGauge instanceof AbstractRadialBargraph)
-                    ((AbstractRadialBargraph) currentGauge).setBarGraphColor(
-                            ColorDef.valueOf(pointerColor.getSelectedItem().toString()));
-                else
-                    ((AbstractRadial) currentGauge).setPointerColor(
-                            PointerColor.valueOf(pointerColor.getSelectedItem().toString()));
-            } else if (currentGauge instanceof AbstractLinear)
-                ((AbstractLinear) currentGauge).setValueColor(
-                        ColorDef.valueOf(pointerColor.getSelectedItem().toString()));
+            // changing pointer color of the gauge
+            if (currentGauge instanceof AbstractRadial)
+                ((AbstractRadial) currentGauge).setPointerColor(
+                    PointerColor.valueOf(pointerColor.getSelectedItem().toString()));
         } else if (source.equals(lcdColor)) {
             // changing Lcd color of the gauge
             if (currentGauge instanceof AbstractRadial)
                 // I can not imagine the best way here... if somebody will find one, let me know
-                ((Radial1Lcd) currentGauge).setLcdColor(
-                        LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
+                if(currentGauge instanceof AbstractRadialBargraph)
+                    ((RadialBargraph4Lcd) currentGauge).setLcdColor(
+                            LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
+                else
+                    ((Radial4Lcd) currentGauge).setLcdColor(
+                            LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
             else if (currentGauge instanceof AbstractLinear)
                 ((LinearLcd) currentGauge).setLcdColor(
                         LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
-        } else if (source.equals(tickmarkColor)) {
-            // changing tickmark color of the gauge
-            Color color = null;
-            String selectedColor = tickmarkColor.getSelectedItem().toString();
-
-            if (selectedColor.equals("Red")) color = Color.RED;
-            else if (selectedColor.equals("Green")) color = Color.GREEN;
-            else if (selectedColor.equals("Blue")) color = Color.BLUE;
-            else if (selectedColor.equals("Magenta")) color = Color.MAGENTA;
-
-            // changing the color of the tickmark
-            if (currentGauge instanceof AbstractRadial)
-                ((AbstractRadial) currentGauge).setTickmarkColor(color);
-            else if (currentGauge instanceof AbstractLinear)
-                ((AbstractLinear) currentGauge).setTickmarkColor(color);
+        } else if (source.equals(barValueColor)) {
+            // changing linear bar or bar graph  color of the gauge
+            if (currentGauge instanceof AbstractRadialBargraph) {
+                ((AbstractRadialBargraph) currentGauge).setBarGraphColor(
+                    ColorDef.valueOf(barValueColor.getSelectedItem().toString()));
+            } else if (currentGauge instanceof AbstractLinear)
+                ((AbstractLinear) currentGauge).setValueColor(
+                        ColorDef.valueOf(barValueColor.getSelectedItem().toString()));
         } else if (source.equals(thresholdCB)) {
             // showing or disappear the threshold indicator
             if (thresholdCB.isSelected()) {
@@ -521,8 +579,12 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             } else {
                 // disappear the threshold indicator
                 if (currentGauge instanceof AbstractRadial) {
+                    // only one way I've founded to reset the  threshold
+                    ((AbstractRadial) currentGauge).setThreshold(100.0);
                     ((AbstractRadial) currentGauge).setThresholdVisible(false);
                 } else if (currentGauge instanceof AbstractLinear) {
+                    // only one way I've founded to reset the  threshold
+                    ((AbstractLinear) currentGauge).setThreshold(100.0);
                     ((AbstractLinear) currentGauge).setThresholdVisible(false);
                 }
             }
@@ -535,20 +597,24 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                     ((AbstractRadial) currentGauge).setMaxValue(60.0);
                     ((AbstractRadial) currentGauge).setMinMeasuredValueVisible(true);
                     ((AbstractRadial) currentGauge).setMaxMeasuredValueVisible(true);
+                    ((AbstractRadial) currentGauge).setMaxValue(100.0);
                 } else if (currentGauge instanceof AbstractLinear) {
                     ((AbstractLinear) currentGauge).setMinValue(.0);
                     ((AbstractLinear) currentGauge).setMaxValue(60.0);
                     ((AbstractLinear) currentGauge).setMinMeasuredValueVisible(true);
                     ((AbstractLinear) currentGauge).setMaxMeasuredValueVisible(true);
+                    ((AbstractLinear) currentGauge).setMaxValue(100.0);
                 }
             } else {
                 // disappear the min. and max. measured values
                 if (currentGauge instanceof AbstractRadial) {
                     ((AbstractRadial) currentGauge).setMinMeasuredValueVisible(false);
                     ((AbstractRadial) currentGauge).setMaxMeasuredValueVisible(false);
+                    ((AbstractRadial) currentGauge).resetMaxMeasuredValue(100.0);
                 } else if (currentGauge instanceof AbstractLinear) {
                     ((AbstractLinear) currentGauge).setMinMeasuredValueVisible(false);
                     ((AbstractLinear) currentGauge).setMaxMeasuredValueVisible(false);
+                    ((AbstractLinear) currentGauge).resetMaxMeasuredValue(100.0);
                 }
             }
         } else if (source.equals(sectionCB)) {
@@ -563,6 +629,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                 // disappear the section
                 if (currentGauge instanceof AbstractRadial) {
                     ((AbstractRadial) currentGauge).setSectionsVisible(false);
+                    ((AbstractRadial) currentGauge).resetSections();
                 }
             }
         } else if (source.equals(trackSectionCB)) {
@@ -593,19 +660,6 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                 // stopping the animation
                 stopTimer();
             }
-        } else {
-            // Timer event.
-            // calculate the fraction elapsed of the animation and call animate()
-            // to alter the values accordingly
-            long currentTime = System.nanoTime() / 1000000;
-            long totalTime = currentTime - cycleStart;
-            if (totalTime > CYCLE_TIME) {
-                cycleStart = currentTime;
-            }
-            float fraction = (float) totalTime / CYCLE_TIME;
-            fraction = Math.min(1.0f, fraction);
-            fraction = 1 - Math.abs(1 - (2 * fraction));
-            animate(fraction);
         }
     }
 
@@ -619,13 +673,11 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         fraction = Math.max(fraction, 0.0f);
         // The pointer/bar move animation will calculate a location based on a linear
         // interpolation between its start and end points using the fraction
-        pointer = pointerMin + (int) (fraction * (float) (pointerMax - pointerMin));
+        pointer = pointerMin + (int) (0.5f + fraction * (float) (pointerMax - pointerMin));
 
+        // Animating pointer/bar/values movement according to fraction
         for(AbstractGauge gauge : toAnimate) {
-            if(gauge instanceof AbstractRadial)
-                ((AbstractRadial)gauge).setValueAnimated(pointer);
-            else if(gauge instanceof AbstractLinear)
-                ((AbstractLinear)gauge).setValueAnimated(pointer);
+            gauge.setValue(pointer);
         }
 
     }
@@ -638,7 +690,22 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             timer.stop();
             timer.setDelay(resolution);
         } else {
-            timer = new Timer(resolution, this);
+            timer = new Timer(resolution, new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // Timer event.
+                    // calculate the fraction elapsed of the animation and call animate()
+                    // to alter the values accordingly
+                    long currentTime = System.nanoTime() / 1000000;
+                    long totalTime = currentTime - cycleStart;
+                    if (totalTime > CYCLE_TIME) {
+                        cycleStart = currentTime;
+                    }
+                    float fraction = (float) totalTime / CYCLE_TIME;
+                    fraction = Math.min(1.0f, fraction);
+                    fraction = 1 - Math.abs(1 - (2 * fraction));
+                    animate(fraction);
+                }
+            });
         }
         cycleStart = System.nanoTime() / 1000000;
         timer.start();
@@ -649,5 +716,13 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
      */
     private void stopTimer() {
         timer.stop();
+
+        // fading the pointer/bar/value
+        for(AbstractGauge gauge : toAnimate) {
+            if(gauge instanceof AbstractRadial)
+                ((AbstractRadial)gauge).setValueAnimated(.0);
+            else if(gauge instanceof AbstractLinear)
+                ((AbstractLinear)gauge).setValueAnimated(.0);
+        }
     }
 }
