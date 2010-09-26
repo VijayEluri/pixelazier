@@ -78,7 +78,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
 
     /*
      * Collection of gauges and current gauge on the selected tab
-     * Parameterized type instance creation with static factory. Easy and elegant. Isn't it?
+     * Parametrised type instance creation with static factory. Easy and elegant. Isn't it?
      * Perhaps, jdk7 will be support this obvious thing
      */
     private Map<String, List<AbstractGauge>> gaugeCache = newHashMap();     // Map of gauges in all panels
@@ -193,6 +193,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         buildRadialGaugesTab();
         buildRadialGaugesLcdTab();
         buildLinearGaugesTab();
+        buildLinearBargraphGaugesTab();
         buildRadialBargraphGaugesTab();
         buildRadialBargraphGaugesLcdTab();
         buildExtensionGaugesTab();
@@ -222,6 +223,9 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         } else if (title.equals("Linear and Linear Lcd Gauges")) {
             toAnimate.addAll(gaugeCache.get("Linear"));
             currentGauge = toAnimate.remove(toAnimate.size() - 1);
+        } else if (title.equals("Linear & Linear Lcd Bargraph Gauges")) {
+            toAnimate.addAll(gaugeCache.get("LinearBar"));
+            currentGauge = toAnimate.remove(toAnimate.size() - 1);
         } else if (title.equals("Radial Bargraph Gauges")) {
             toAnimate.addAll(gaugeCache.get("RadialBar"));
             currentGauge = toAnimate.remove(toAnimate.size() - 1);
@@ -244,12 +248,14 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
 
         // Lcd color chooser
         if(title.equals("Radial Lcd Gauges") || title.equals("Linear and Linear Lcd Gauges") ||
-                title.equals("Radial Bargraph Lcd Gauges")) lcdColor.setEnabled(true);
+                title.equals("Linear & Linear Lcd Bargraph Gauges") || title.equals("Radial Bargraph Lcd Gauges"))
+            lcdColor.setEnabled(true);
         else lcdColor.setEnabled(false);
 
         // section, track section, pointer/bar/value colors
         if(title.equals("Radial Bargraph Gauges") || title.equals("Radial Bargraph Lcd Gauges") ||
-                title.equals("Linear and Linear Lcd Gauges") || title.equals("Extension Gauges")) {
+                title.equals("Linear and Linear Lcd Gauges") || title.equals("Extension Gauges") ||
+                title.equals("Linear & Linear Lcd Bargraph Gauges")) {
             sectionCB.setEnabled(false);
             trackSectionCB.setEnabled(false);
             pointerColor.setEnabled(false);
@@ -281,7 +287,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
 
     // building the panel with gauges and put that into the cache and tabbed pane.
     // customizing some of the gauges properties on each step of iteration.
-    private void initTabPanel(Collection<? extends GaugeOperation> opSet, List<? super AbstractGauge> gaugeList,
+    private void initTabPanel(Collection<? extends GaugeOperation> opSet, Collection<? super AbstractGauge> gaugeColl,
                               JPanel panel) {
         int i = 0;
         for (GaugeOperation op : opSet) {
@@ -289,7 +295,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             if (gauge instanceof Altimeter || gauge instanceof Clock ||
                     gauge instanceof Compass || gauge instanceof Level) {
                 if(gauge instanceof Clock) continue; // I've got some problems with Clock dimensions
-                gaugeList.add(gauge);
+                gaugeColl.add(gauge);
                 panel.add(gauge);
                 i++;
                 continue;
@@ -313,7 +319,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                 radar.addPoi(rubyDev);
                 radar.animate(true);
 
-                gaugeList.add(radar);
+                gaugeColl.add(radar);
                 panel.add(radar);
                 i++;
                 continue;
@@ -330,11 +336,15 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             } else if (gauge instanceof AbstractLinear) {
                 ((AbstractLinear) gauge).setBackgroundColor(
                         (i < backgroundColors.length ? backgroundColors[i] : backgroundColors[0]));
-                ((AbstractLinear) gauge).setValueColor(
-                        (i < defColors.length ? defColors[i] : defColors[0]));
+                if (gauge instanceof AbstractLinearBargraph)
+                    ((AbstractLinearBargraph) gauge).setBarGraphColor(
+                            (i < defColors.length ? defColors[i] : defColors[0]));
+                else
+                    ((AbstractLinear) gauge).setValueColor(
+                            (i < defColors.length ? defColors[i] : defColors[0]));
             }
 
-            gaugeList.add(gauge);
+            gaugeColl.add(gauge);
             panel.add(gauge);
             i++;
         }
@@ -369,6 +379,16 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         initTabPanel(Arrays.asList(LinearGaugesSet.values()), linearList, panel);
         gaugeCache.put("Linear", linearList);
         gaugesPane.add("Linear and Linear Lcd Gauges", panel);
+    }
+
+    // initializing tab with Linear Bargraph and Linear Bargraph Lcd Gauges
+    private void buildLinearBargraphGaugesTab() {
+        List<AbstractGauge> linearBarList = new ArrayList<AbstractGauge>();
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 4));
+        initTabPanel(Arrays.asList(LinearBargraphGaugesSet.values()), linearBarList, panel);
+        gaugeCache.put("LinearBar", linearBarList);
+        gaugesPane.add("Linear & Linear Lcd Bargraph Gauges", panel);
     }
 
     // initializing tab with Radial Bargraph Gauges
@@ -510,9 +530,8 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
     }
 
     /**
-     * This method handles both components actions, which changes current gauge properties,
-     * start/stop the animation,
-     * and Swing Timer events, which animate the values change of the pointers or bar graphs.
+     * This method handles components actions, which changes current gauge properties,
+     * start/stop the animation
      *
      * @inheritDoc
      */
@@ -544,7 +563,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                     PointerColor.valueOf(pointerColor.getSelectedItem().toString()));
         } else if (source.equals(lcdColor)) {
             // changing Lcd color of the gauge
-            if (currentGauge instanceof AbstractRadial)
+            if (currentGauge instanceof AbstractRadial) {
                 // I can not imagine the best way here... if somebody will find one, let me know
                 if(currentGauge instanceof AbstractRadialBargraph)
                     ((RadialBargraph4Lcd) currentGauge).setLcdColor(
@@ -552,17 +571,28 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                 else
                     ((Radial4Lcd) currentGauge).setLcdColor(
                             LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
-            else if (currentGauge instanceof AbstractLinear)
-                ((LinearLcd) currentGauge).setLcdColor(
-                        LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
+            }
+            else if (currentGauge instanceof AbstractLinear) {
+                if(currentGauge instanceof AbstractLinearBargraph)
+                    ((LinearBargraphLcd) currentGauge).setLcdColor(
+                            LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
+                else
+                    ((LinearLcd) currentGauge).setLcdColor(
+                            LcdColor.valueOf(lcdColor.getSelectedItem().toString()));
+            }
         } else if (source.equals(barValueColor)) {
             // changing linear bar or bar graph  color of the gauge
             if (currentGauge instanceof AbstractRadialBargraph) {
                 ((AbstractRadialBargraph) currentGauge).setBarGraphColor(
                     ColorDef.valueOf(barValueColor.getSelectedItem().toString()));
-            } else if (currentGauge instanceof AbstractLinear)
-                ((AbstractLinear) currentGauge).setValueColor(
+            } else if (currentGauge instanceof AbstractLinear) {
+                if(currentGauge instanceof AbstractLinearBargraph)
+                    ((AbstractLinearBargraph) currentGauge).setBarGraphColor(
                         ColorDef.valueOf(barValueColor.getSelectedItem().toString()));
+                else
+                    ((AbstractLinear) currentGauge).setValueColor(
+                            ColorDef.valueOf(barValueColor.getSelectedItem().toString()));
+            }
         } else if (source.equals(thresholdCB)) {
             // showing or disappear the threshold indicator
             if (thresholdCB.isSelected()) {
