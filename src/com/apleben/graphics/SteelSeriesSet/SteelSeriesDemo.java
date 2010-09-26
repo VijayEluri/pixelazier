@@ -228,9 +228,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
         } else if (title.equals("Radial Bargraph Lcd Gauges")) {
             toAnimate.addAll(gaugeCache.get("RadialBarLcd"));
             currentGauge = toAnimate.remove(toAnimate.size() - 1);
-        } else if (title.equals("Extension Gauges")) {
-            toAnimate.addAll(gaugeCache.get("Extension"));
-            currentGauge = toAnimate.remove(3);
+        } else if (title.equals("Extension Gauges")) { // just ignore that :)
         }
     }
 
@@ -271,11 +269,13 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             thresholdCB.setEnabled(false);
             animateCB.setEnabled(false);
             barValueColor.setEnabled(false);
+            pointerSlider.setEnabled(false);
         }
         else {
             maxMeasuredCB.setEnabled(true);
             thresholdCB.setEnabled(true);
             animateCB.setEnabled(true);
+            pointerSlider.setEnabled(true);
         }
     }
 
@@ -288,9 +288,7 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
             AbstractGauge gauge = op.init();
             if (gauge instanceof Altimeter || gauge instanceof Clock ||
                     gauge instanceof Compass || gauge instanceof Level) {
-                // strange bug.. try to comment it and look what's happened
-                if(gauge instanceof Clock)
-                    gauge.setSize(50, 50);
+                if(gauge instanceof Clock) continue; // I've got some problems with Clock dimensions
                 gaugeList.add(gauge);
                 panel.add(gauge);
                 i++;
@@ -610,11 +608,11 @@ public class SteelSeriesDemo extends JFrame implements ActionListener {
                 if (currentGauge instanceof AbstractRadial) {
                     ((AbstractRadial) currentGauge).setMinMeasuredValueVisible(false);
                     ((AbstractRadial) currentGauge).setMaxMeasuredValueVisible(false);
-                    ((AbstractRadial) currentGauge).resetMaxMeasuredValue(100.0);
+                    ((AbstractRadial) currentGauge).setMaxValue(100.0);
                 } else if (currentGauge instanceof AbstractLinear) {
                     ((AbstractLinear) currentGauge).setMinMeasuredValueVisible(false);
                     ((AbstractLinear) currentGauge).setMaxMeasuredValueVisible(false);
-                    ((AbstractLinear) currentGauge).resetMaxMeasuredValue(100.0);
+                    ((AbstractLinear) currentGauge).setMaxValue(100.0);
                 }
             }
         } else if (source.equals(sectionCB)) {

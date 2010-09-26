@@ -36,17 +36,6 @@ public enum ExtensionGaugesSet implements GaugeOperation {
             return new Altimeter().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     },
-    CLOCK("Clock") {
-        @Override
-        public AbstractGauge init(int w, int h) {
-            return new Clock().init(w, h);
-        }
-
-        @Override
-        public AbstractGauge init() {
-            return new Clock().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-        }
-    },
     COMPASS("Compass") {
         @Override
         public AbstractGauge init(int w, int h) {
@@ -78,6 +67,17 @@ public enum ExtensionGaugesSet implements GaugeOperation {
         @Override
         public AbstractGauge init() {
             return new Radar().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+        }
+    },
+    CLOCK("Clock") {
+        @Override
+        public AbstractGauge init(int w, int h) {
+            return new Clock().init(w, h);
+        }
+
+        @Override
+        public AbstractGauge init() {
+            return new Clock().init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         }
     };
 
