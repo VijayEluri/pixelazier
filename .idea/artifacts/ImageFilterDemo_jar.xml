@@ -1,13 +1,25 @@
 <component name="ArtifactManager">
-  <artifact name="ImageFilterDemo:jar">
+  <artifact type="jar" name="ImageFilterDemo:jar">
     <output-path>$PROJECT_DIR$/bin/ImageProcessing</output-path>
-    <root id="root">
-      <element id="archive" name="ImageFilterDemo.jar">
-        <element id="directory" name="META-INF">
-          <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+    <root id="archive" name="ImageFilterDemo.jar">
+      <element id="directory" name="com">
+        <element id="directory" name="apleben">
+          <element id="directory" name="image">
+            <element id="directory" name="ImageProcessing">
+              <element id="dir-copy" path="$PROJECT_DIR$/out/production/JavaPixelazier/com/apleben/image/ImageProcessing" />
+            </element>
+          </element>
+          <element id="directory" name="swing">
+            <element id="directory" name="common">
+              <element id="dir-copy" path="$PROJECT_DIR$/out/production/JavaPixelazier/com/apleben/swing/common" />
+            </element>
+          </element>
+          <element id="directory" name="utils">
+            <element id="directory" name="common">
+              <element id="dir-copy" path="$PROJECT_DIR$/out/production/JavaPixelazier/com/apleben/utils/common" />
+            </element>
+          </element>
         </element>
-        <element id="module-output" name="JavaPixelazier" />
-        <element id="file-copy" path="$PROJECT_DIR$/gpl.txt" />
       </element>
     </root>
   </artifact>

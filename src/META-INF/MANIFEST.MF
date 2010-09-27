@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: ../../lib/forms-1.2.1.jar ../../lib/mac_widgets-0.9.5.jar
-Main-Class: com.apleben.image.ImageProcessing.ImageFilterDemo
-

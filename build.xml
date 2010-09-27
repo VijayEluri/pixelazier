@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2010. Alexander Pupeikis
+  ~
+  ~ This file is part of JavaPixelazier.
+  ~
+  ~ JavaPixelazier is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ JavaPixelazier is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with JavaPixelazier.  If not, see http://www.gnu.org/licenses/.
+  -->
+
+<project name="javapixelazier" default="all">
+  
+  
+  <property file="javapixelazier.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="128m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.pyc/**"/>
+    <exclude name="**/.pyo/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.sbas/**"/>
+    <exclude name="**/.IJI.*/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.ear"/>
+    <include name="*.zip"/>
+    <include name="*.swc"/>
+    <include name="*.egg"/>
+    <include name="*.jar"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <include name="**/?*.properties"/>
+    <include name="**/?*.xml"/>
+    <include name="**/?*.gif"/>
+    <include name="**/?*.png"/>
+    <include name="**/?*.jpeg"/>
+    <include name="**/?*.jpg"/>
+    <include name="**/?*.html"/>
+    <include name="**/?*.dtd"/>
+    <include name="**/?*.tld"/>
+    <include name="**/?*.ftl"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.6" value="${jdk.home.1.6}/bin"/>
+  <path id="jdk.classpath.1.6">
+    <fileset dir="${jdk.home.1.6}">
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/alt-rt.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.6}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.6}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.6"/>
+  
+  
+  <!-- Project Libraries -->
+  
+  <path id="library.jgoodies_forms.classpath">
+    <pathelement location="${basedir}/lib/forms-1.2.1.jar"/>
+  </path>
+  
+  <path id="library.junit4.classpath">
+    <pathelement location="${basedir}/lib/test/junit-4.8.2.jar"/>
+  </path>
+  
+  <path id="library.mac_widgets.classpath">
+    <pathelement location="${basedir}/lib/mac_widgets-0.9.5.jar"/>
+  </path>
+  
+  <path id="library.steel_series.classpath">
+    <pathelement location="${basedir}/lib/SteelSeries.jar"/>
+  </path>
+  
+  <path id="library.trident.classpath">
+    <pathelement location="${basedir}/lib/trident.jar"/>
+  </path>
+  
+  
+  <!-- Global Libraries -->
+  
+  <path id="library.jgoodies_forms.classpath">
+    <pathelement location="/home/apupeikis/Development/Libs/Java/JFC Swing, SWT, Graphics/Java L&amp;F/JGoodies Forms /forms-1.2.1/forms-1.2.1.jar"/>
+  </path>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module JavaPixelazier -->
+  
+  <dirname property="module.javapixelazier.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.javapixelazier" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.javapixelazier" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.javapixelazier" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.javapixelazier" value="${compiler.args}"/>
+  
+  <property name="javapixelazier.output.dir" value="${module.javapixelazier.basedir}/out/production/JavaPixelazier"/>
+  <property name="javapixelazier.testoutput.dir" value="${module.javapixelazier.basedir}/out/test/JavaPixelazier"/>
+  
+  <path id="javapixelazier.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="javapixelazier.module.production.classpath">
+    <path refid="${module.jdk.classpath.javapixelazier}"/>
+    <path refid="library.jgoodies_forms.classpath"/>
+    <path refid="library.mac_widgets.classpath"/>
+    <path refid="library.steel_series.classpath"/>
+    <path refid="library.trident.classpath"/>
+    <path refid="library.junit4.classpath"/>
+  </path>
+  
+  <path id="javapixelazier.runtime.production.module.classpath">
+    <pathelement location="${javapixelazier.output.dir}"/>
+    <path refid="library.jgoodies_forms.classpath"/>
+    <path refid="library.mac_widgets.classpath"/>
+    <path refid="library.steel_series.classpath"/>
+    <path refid="library.trident.classpath"/>
+    <path refid="library.junit4.classpath"/>
+  </path>
+  
+  <path id="javapixelazier.module.classpath">
+    <path refid="${module.jdk.classpath.javapixelazier}"/>
+    <pathelement location="${javapixelazier.output.dir}"/>
+    <path refid="library.jgoodies_forms.classpath"/>
+    <path refid="library.mac_widgets.classpath"/>
+    <path refid="library.steel_series.classpath"/>
+    <path refid="library.trident.classpath"/>
+    <path refid="library.junit4.classpath"/>
+  </path>
+  
+  <path id="javapixelazier.runtime.module.classpath">
+    <pathelement location="${javapixelazier.testoutput.dir}"/>
+    <pathelement location="${javapixelazier.output.dir}"/>
+    <path refid="library.jgoodies_forms.classpath"/>
+    <path refid="library.mac_widgets.classpath"/>
+    <path refid="library.steel_series.classpath"/>
+    <path refid="library.trident.classpath"/>
+    <path refid="library.junit4.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.javapixelazier">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.javapixelazier">
+    <patternset refid="excluded.from.module.javapixelazier"/>
+  </patternset>
+  
+  <path id="javapixelazier.module.sourcepath">
+    <dirset dir="${module.javapixelazier.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.javapixelazier" depends="compile.module.javapixelazier.production,compile.module.javapixelazier.tests" description="Compile module JavaPixelazier"/>
+  
+  <target name="compile.module.javapixelazier.production" description="Compile module JavaPixelazier; production classes">
+    <mkdir dir="${javapixelazier.output.dir}"/>
+    <javac destdir="${javapixelazier.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.javapixelazier}/javac">
+      <compilerarg line="${compiler.args.javapixelazier}"/>
+      <bootclasspath refid="javapixelazier.module.bootclasspath"/>
+      <classpath refid="javapixelazier.module.production.classpath"/>
+      <src refid="javapixelazier.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.javapixelazier"/>
+    </javac>
+    
+    <copy todir="${javapixelazier.output.dir}">
+      <fileset dir="${module.javapixelazier.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.javapixelazier.tests" depends="compile.module.javapixelazier.production" description="compile module JavaPixelazier; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.javapixelazier" description="cleanup module">
+    <delete dir="${javapixelazier.output.dir}"/>
+    <delete dir="${javapixelazier.testoutput.dir}"/>
+  </target>
+  
+  <target name="init" description="Build initialization">
+    <!-- Perform any build initialization in this target -->
+  </target>
+  
+  <target name="clean" depends="clean.module.javapixelazier" description="cleanup all"/>
+  
+  <target name="build.modules" depends="init, clean, compile.module.javapixelazier" description="build all modules"/>
+  
+  <target name="init.artifacts">
+    <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
+    <property name="artifact.output.imagefilterdemo:jar" value="${basedir}/bin/ImageProcessing"/>
+    <property name="artifact.output.steelseriesdemo:jar" value="${basedir}/bin/SteelSeries"/>
+    <mkdir dir="${artifacts.temp.dir}"/>
+    <property name="temp.jar.path.ImageFilterDemo.jar" value="${artifacts.temp.dir}/ImageFilterDemo.jar"/>
+    <property name="temp.jar.path.SteelSeriesDemo.jar" value="${artifacts.temp.dir}/SteelSeriesDemo.jar"/>
+  </target>
+  
+  <target name="artifact.imagefilterdemo:jar" depends="init.artifacts" description="Build &apos;ImageFilterDemo:jar&apos; artifact">
+    <property name="artifact.temp.output.imagefilterdemo:jar" value="${artifacts.temp.dir}/ImageFilterDemo_jar"/>
+    <mkdir dir="${artifact.temp.output.imagefilterdemo:jar}"/>
+    <jar destfile="${temp.jar.path.ImageFilterDemo.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+      <manifest>
+        <attribute name="Main-Class" value="com.apleben.image.ImageProcessing.ImageFilterDemo"/>
+        <attribute name="Class-Path" value="../../lib/forms-1.2.1.jar ../../lib/mac_widgets-0.9.5.jar"/>
+      </manifest>
+      <zipfileset dir="${basedir}/out/production/JavaPixelazier/com/apleben/image/ImageProcessing" prefix="com/apleben/image/ImageProcessing"/>
+      <zipfileset dir="${basedir}/out/production/JavaPixelazier/com/apleben/swing/common" prefix="com/apleben/swing/common"/>
+      <zipfileset dir="${basedir}/out/production/JavaPixelazier/com/apleben/utils/common" prefix="com/apleben/utils/common"/>
+    </jar>
+    <copy file="${temp.jar.path.ImageFilterDemo.jar}" tofile="${artifact.temp.output.imagefilterdemo:jar}/ImageFilterDemo.jar"/>
+  </target>
+  
+  <target name="artifact.steelseriesdemo:jar" depends="init.artifacts" description="Build &apos;SteelSeriesDemo:jar&apos; artifact">
+    <property name="artifact.temp.output.steelseriesdemo:jar" value="${artifacts.temp.dir}/SteelSeriesDemo_jar"/>
+    <mkdir dir="${artifact.temp.output.steelseriesdemo:jar}"/>
+    <jar destfile="${temp.jar.path.SteelSeriesDemo.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+        <manifest>
+            <attribute name="Main-Class" value="com.apleben.graphics.SteelSeriesSet.SteelSeriesDemo"/>
+            <attribute name="Class-Path" value="../../lib/forms-1.2.1.jar ../../lib/SteelSeries.jar ../../lib/trident.jar"/>
+      </manifest>
+      <zipfileset dir="${basedir}/out/production/JavaPixelazier/com/apleben/graphics/SteelSeriesSet" prefix="com/apleben/graphics/SteelSeriesSet"/>
+    </jar>
+    <copy file="${temp.jar.path.SteelSeriesDemo.jar}" tofile="${artifact.temp.output.steelseriesdemo:jar}/SteelSeriesDemo.jar"/>
+  </target>
+  
+  <target name="build.all.artifacts" depends="artifact.imagefilterdemo:jar, artifact.steelseriesdemo:jar" description="Build all artifacts">
+    <mkdir dir="${artifact.output.imagefilterdemo:jar}"/>
+    <copy todir="${artifact.output.imagefilterdemo:jar}">
+      <fileset dir="${artifact.temp.output.imagefilterdemo:jar}"/>
+    </copy>
+    <mkdir dir="${artifact.output.steelseriesdemo:jar}"/>
+    <copy todir="${artifact.output.steelseriesdemo:jar}">
+      <fileset dir="${artifact.temp.output.steelseriesdemo:jar}"/>
+    </copy>
+    
+    <!-- Delete temporary files -->
+    <delete dir="${artifacts.temp.dir}"/>
+  </target>
+  
+  <target name="all" depends="build.modules, build.all.artifacts" description="build all"/>
+</project>
