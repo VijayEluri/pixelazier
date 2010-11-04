@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Timing Framework">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/TimingFramework.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../../Libs/Java/Swing, Graphics/JavaDesktop/TimingFramework/doc" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
