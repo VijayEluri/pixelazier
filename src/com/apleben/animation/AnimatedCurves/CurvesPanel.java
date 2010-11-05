@@ -23,14 +23,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 
-/**
- * @author apupeikis
- */
 public class CurvesPanel extends JPanel {
-    protected RenderingHints hints;
-    protected int counter = 0;
-    protected Color start = new Color(255, 255, 255, 200);
-    protected Color end = new Color(255, 255, 255, 0);
+    private RenderingHints hints;
+    private int counter = 0;
+    private Color start = new Color(255, 255, 255, 200);
+    private Color end = new Color(255, 255, 255, 0);
 
     public CurvesPanel() {
         this(new BorderLayout());
@@ -41,7 +38,7 @@ public class CurvesPanel extends JPanel {
         hints = createRenderingHints();
     }
 
-    protected RenderingHints createRenderingHints() {
+    private RenderingHints createRenderingHints() {
         RenderingHints hints = new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
         hints.put(RenderingHints.KEY_INTERPOLATION,
@@ -104,7 +101,7 @@ public class CurvesPanel extends JPanel {
         g2.setRenderingHints(oldHints);
     }
 
-    protected void drawCurve(Graphics2D g2,
+    private void drawCurve(Graphics2D g2,
                              float y1, float y1_offset,
                              float y2, float y2_offset,
                              float cx1, float cx1_offset,

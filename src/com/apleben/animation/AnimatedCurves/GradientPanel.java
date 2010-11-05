@@ -30,9 +30,9 @@ import java.awt.image.BufferedImage;
  * @author apupeikis
  */
 public class GradientPanel extends JPanel {
-    protected BufferedImage gradientImage;
-    protected Color gradientStart = new Color(204, 249, 124);
-    protected Color gradientEnd = new Color(174, 222, 94);
+    private BufferedImage gradientImage;
+    private Color gradientStart = new Color(204, 249, 124);
+    private Color gradientEnd = new Color(174, 222, 94);
 
     public GradientPanel() {
         this(new BorderLayout());
@@ -52,7 +52,7 @@ public class GradientPanel extends JPanel {
         }
     }
 
-    protected void createImageCache() {
+    private void createImageCache() {
         int width = 2;
         int height = getHeight();
 
@@ -93,7 +93,7 @@ public class GradientPanel extends JPanel {
         }
     }
 
-    private class CacheManager implements ComponentListener {
+    private final class CacheManager implements ComponentListener {
         public void componentResized(ComponentEvent e) {
         }
 
