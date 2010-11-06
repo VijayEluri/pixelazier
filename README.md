@@ -8,7 +8,7 @@ Usage
 -----
 
 See [at the bin directory](https://github.com/apupeikis/JavaPixelazier/tree/master/bin/). Start playing with the demos.
-All demos packaged in single jar files. To run the demos you need the additional libraries located [at the lib directory] (https://github.com/apupeikis/JavaPixelazier/tree/master/lib/).
+All demos packaged in single jar files. To run the demos you need the additional libraries located at the lib directory.
 
 License
 -------
