@@ -19,11 +19,13 @@
 
 package com.apleben.animation.AnimatedCurves;
 
+import org.jdesktop.swingx.graphics.GraphicsUtilities;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
@@ -31,8 +33,11 @@ import java.awt.image.BufferedImage;
  */
 public class GradientPanel extends JPanel {
     private BufferedImage gradientImage;
-    private Color gradientStart = new Color(204, 249, 124);
-    private Color gradientEnd = new Color(174, 222, 94);
+    private Color gradients [] = new Color[] {
+            new Color(174, 222, 94),
+            new Color(204, 249, 124),
+            new Color(174, 222, 94)
+    };
 
     public GradientPanel() {
         this(new BorderLayout());
@@ -64,23 +69,16 @@ public class GradientPanel extends JPanel {
                 width != gradientImage.getWidth() ||
                 height != gradientImage.getHeight()) {
 
-            gradientImage = new BufferedImage(width, height,
-                    BufferedImage.TYPE_INT_RGB);
-
+            gradientImage = GraphicsUtilities.createCompatibleImage(width, height);
             Graphics2D g2 = gradientImage.createGraphics();
-            GradientPaint painter = new GradientPaint(0, 0, gradientEnd,
-                    0, height / 2, gradientStart);
-            g2.setPaint(painter);
 
-            Rectangle2D rect = new Rectangle2D.Double(0, 0, width, height / 2.0);
-            g2.fill(rect);
+            Point2D start = new Point2D.Float(0, 0);
+            Point2D end = new Point2D.Float(width, height);
+            float dist [] = {0.0f, 0.5f, 1.0f};
+            LinearGradientPaint gradient = new LinearGradientPaint(start, end, dist, gradients);
+            g2.setPaint(gradient);
 
-            painter = new GradientPaint(0, height / 2, gradientStart,
-                    0, height, gradientEnd);
-            g2.setPaint(painter);
-
-            rect = new Rectangle2D.Double(0, (height / 2.0) - 1.0, width, height);
-            g2.fill(rect);
+            g2.fillRect(0, 0, width, height);
 
             g2.dispose();
         }
@@ -93,16 +91,8 @@ public class GradientPanel extends JPanel {
         }
     }
 
-    private final class CacheManager implements ComponentListener {
-        public void componentResized(ComponentEvent e) {
-        }
-
-        public void componentMoved(ComponentEvent e) {
-        }
-
-        public void componentShown(ComponentEvent e) {
-        }
-
+    private final class CacheManager extends ComponentAdapter {
+        @Override
         public void componentHidden(ComponentEvent e) {
             disposeImageCache();
         }
