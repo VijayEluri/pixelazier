@@ -22,6 +22,7 @@ package com.apleben.swing.buttons;
 import org.jdesktop.animation.timing.Animator;
 import org.jdesktop.animation.timing.TimingTargetAdapter;
 import org.jdesktop.swingx.graphics.GraphicsUtilities;
+import org.jdesktop.swingx.image.ColorTintFilter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -30,9 +31,11 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.font.TextLayout;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -46,7 +49,9 @@ public class RoundButton extends JButton {
 
     private BufferedImage normalButton, normalButtonPressed, buttonHighlight;
     private int shadowDistance = 1;
-    private Dimension buttonDimension = new Dimension(150, 35);
+    private Dimension buttonDimension = new Dimension(116, 35);
+
+    private ColorTintFilter tintFilter = new ColorTintFilter(Color.GRAY, 0.7f);
 
     private float ghostValue;
 
@@ -67,10 +72,12 @@ public class RoundButton extends JButton {
 
         setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         setForeground(Color.WHITE);
-        setFont(new Font("Arial", Font.BOLD, 22));
+        setFont(new Font("Arial", Font.BOLD, 16));
         setContentAreaFilled(false);
+        setOpaque(false);
         setBorderPainted(false);
         setFocusable(false);
+        setFocusPainted(false);
 
         setUI(new BasicButtonUI() {
             @Override
@@ -106,22 +113,71 @@ public class RoundButton extends JButton {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        ButtonModel model = getModel();
         Insets insets = getInsets();
 
+        drawButtonImage(g2, insets);
+        drawButtonText(g2, insets);
+    }
+
+    private void drawButtonImage(Graphics2D g2, Insets insets) {
         int width = getWidth() - insets.left - insets.right;
         int height = getHeight() - insets.top - insets.bottom;
 
-        //TODO: properly implement button painting
+        if(normalButton == null || normalButton.getWidth() != width ||
+                normalButton.getHeight() != height) {
+            normalButton = GraphicsUtilities.createCompatibleTranslucentImage(width, height);
+            Graphics2D g = normalButton.createGraphics();
+
+            RoundRectangle2D bullet = new RoundRectangle2D.Double(0.0, 0.0, width, height, height, height);
+            Ellipse2D curve = new Ellipse2D.Double(-20.0, height / 2.0, width + 40.0, height);
+
+            g.translate(-1, -2);
+            g.setColor(new Color(0, 0, 0, 150));
+            g.fill(new RoundRectangle2D.Double(0.0, 0.0,
+                    width + 2, height + 4, height + 4, height + 4));
+            g.translate(1, 2);
+
+            Color startColor = new Color(10, 0, 40);
+            Color endColor = new Color(175, 165, 225);
+
+            Paint paint = g.getPaint();
+            g2.setPaint(new GradientPaint(0.0f, 0.0f, startColor,
+                    0.0f, (float) height, endColor));
+            g.fill(bullet);
+
+            startColor = new Color(5, 0, 50);
+            endColor = new Color(105, 100, 155);
+            g2.setPaint(new GradientPaint(0.0f, 0.0f, startColor,
+                    0.0f, (float ) height, endColor));
+
+            Area area = new Area(bullet);
+            area.intersect(new Area(curve));
+            g.fill(area);
+            g.setPaint(paint);
+            g.dispose();
+
+            if(normalButtonPressed != null) {
+                normalButtonPressed.flush();
+                normalButtonPressed = null;
+            }
+
+            normalButtonPressed = GraphicsUtilities.createCompatibleTranslucentImage(width, height);
+
+            tintFilter.filter(normalButton, normalButtonPressed);
+        }
+
+        g2.drawImage(model.isArmed() ? normalButtonPressed : normalButton, 0, 0, null);
+
+
         if(buttonHighlight == null) {
             try {
-                buttonHighlight = ImageIO.read(new File("./resources/halo.png"));
+                String fileName = "/com/apleben/swing/buttons/resources/halo.png";
+                buttonHighlight = ImageIO.read(RoundButton.class.getResource(fileName));
                 buttonHighlight = GraphicsUtilities.toCompatibleImage(buttonHighlight);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
 
         if (ghostValue > 0.0f) {
             g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
@@ -141,18 +197,19 @@ public class RoundButton extends JButton {
                     width - 4, height - 4, null);
             g2.setComposite(composite);
         }
+    }
 
+    private void drawButtonText(Graphics2D g2, Insets insets) {
         FontMetrics fm = getFontMetrics(getFont());
         TextLayout layout = new TextLayout(getText(),
                 getFont(),
                 g2.getFontRenderContext());
         Rectangle2D bounds = layout.getBounds();
 
-        int x = (int) (getWidth() - insets.left - insets.right -
+        float x = (float) (getWidth() - insets.left - insets.right -
                 bounds.getWidth()) / 2;
-        int y = (getHeight() - insets.top - insets.bottom -
-                fm.getMaxAscent() - fm.getMaxDescent()) / 2;
-        y += fm.getAscent() - 1;
+        float y = (float) ((getHeight() - insets.top - insets.bottom -
+                fm.getMaxAscent() - fm.getMaxDescent()) / 2) + fm.getAscent() - 1;
 
         if (model.isArmed()) {
             x += 1;
@@ -161,8 +218,8 @@ public class RoundButton extends JButton {
 
         g2.setColor(Color.BLACK);
         layout.draw(g2,
-                x + (int) Math.ceil(shadowOffsetX),
-                y + (int) Math.ceil(shadowOffsetY));
+                x + (float) Math.ceil(shadowOffsetX),
+                y + (float) Math.ceil(shadowOffsetY));
         g2.setColor(getForeground());
         layout.draw(g2, x, y);
     }
