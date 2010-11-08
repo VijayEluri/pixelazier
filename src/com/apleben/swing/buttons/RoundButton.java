@@ -112,6 +112,8 @@ public class RoundButton extends JButton {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
         Insets insets = getInsets();
 
@@ -144,6 +146,7 @@ public class RoundButton extends JButton {
             g2.setPaint(new GradientPaint(0.0f, 0.0f, startColor,
                     0.0f, (float) height, endColor));
             g.fill(bullet);
+            g.draw(bullet);
 
             startColor = new Color(5, 0, 50);
             endColor = new Color(105, 100, 155);
@@ -180,9 +183,6 @@ public class RoundButton extends JButton {
         }
 
         if (ghostValue > 0.0f) {
-            g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-                    RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-
             float alphaValue = ghostValue;
             Composite composite = g2.getComposite();
             if (composite instanceof AlphaComposite) {

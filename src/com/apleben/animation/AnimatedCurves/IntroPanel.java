@@ -46,6 +46,10 @@ public class IntroPanel extends JXPanel {
         startFadeInAnimation();
     }
 
+    public Animator getFinalAnimator() {
+        return logo.getGlowAnimator();
+    }
+
     private void buildContentPane() {
         setLayout(new StackLayout());
         logo = new BlurPulseLogo("/com/apleben/animation/AnimatedCurves/resources/logo.png");
@@ -68,6 +72,7 @@ public class IntroPanel extends JXPanel {
     }
 
     public static class BlurPulseLogo extends JComponent {
+        private Animator glowAnimator;
         private BufferedImage image, glow, blurred;
         private int radius = 30;
         private GaussianBlurFilter blurFilter;
@@ -82,11 +87,27 @@ public class IntroPanel extends JXPanel {
                 e.printStackTrace();
             }
             blurFilter = new GaussianBlurFilter(radius);
+            PropertySetter setter = new PropertySetter(this, "alpha", 0.0f, 1.0f);
+            glowAnimator = new Animator(800, 6.0, Animator.RepeatBehavior.REVERSE, setter);
+        }
+
+        @Override
+        public Dimension getMinimumSize() {
+            return getPreferredSize();
+        }
+
+        @Override
+        public Dimension getMaximumSize() {
+            return getPreferredSize();
         }
 
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(image.getWidth(), image.getHeight());
+        }
+
+        public Animator getGlowAnimator() {
+            return glowAnimator;
         }
 
         public float getAlpha() {
@@ -196,35 +217,7 @@ public class IntroPanel extends JXPanel {
 
         private void startGlowAnimator() {
             glowPaint = true;
-            PropertySetter setter = new PropertySetter(this, "alpha", 0.0f, 1.0f);
-            Animator animator = new Animator(800, 6.0, Animator.RepeatBehavior.REVERSE, setter);
-            animator.start();
+            glowAnimator.start();
         }
-    }
-
-    public static void main(String... arg) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IllegalAccessException ex) {
-            ex.printStackTrace();
-        } catch (InstantiationException ex) {
-            ex.printStackTrace();
-        } catch (UnsupportedLookAndFeelException ex) {
-            ex.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                JFrame frame = new JFrame("Intro Panel Test");
-                frame.setContentPane(new IntroPanel());
-                frame.setSize(640, 400);
-                frame.setLocationRelativeTo(null);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-            }
-        });
     }
 }

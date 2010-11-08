@@ -15,6 +15,7 @@
     <orderEntry type="library" name="junit4" level="project" />
     <orderEntry type="library" name="Timing Framework" level="project" />
     <orderEntry type="library" name="swingx" level="project" />
+    <orderEntry type="library" name="Animated Transitions" level="project" />
   </component>
 </module>
 

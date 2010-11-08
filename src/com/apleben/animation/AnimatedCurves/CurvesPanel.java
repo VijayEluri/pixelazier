@@ -48,8 +48,13 @@ public class CurvesPanel extends JPanel {
         return hints;
     }
 
-    public void animate() {
-        counter++;
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+        repaint();
     }
 
     @Override
