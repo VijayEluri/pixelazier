@@ -29,25 +29,38 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
 /**
+ * The {@code GradientPanel} that fill the background of the panel
+ *
  * @author apupeikis
  */
 public class GradientPanel extends JPanel {
-    private BufferedImage gradientImage;
-    private Color gradients [] = new Color[] {
+    private BufferedImage gradientImage;          // gradient image cache
+    private Color gradients [] = new Color[] {    // color gradients
             new Color(174, 222, 94),
             new Color(204, 249, 124),
             new Color(174, 222, 94)
     };
 
+    /**
+     * Creating the new instance of the {@code GradientPanel}
+     */
     public GradientPanel() {
         this(new BorderLayout());
     }
 
+    /**
+     * Creating the new instance of the {@code GradientPanel}
+     * @param layout the {@code LayoutManager} to instantiate with
+     */
     public GradientPanel(LayoutManager layout) {
         super(layout);
         addComponentListener(new CacheManager());
     }
 
+    /**
+     * Painting the gradient image as a background
+     * {@inheritDoc}
+     */
     @Override
     protected void paintComponent(Graphics g) {
         createImageCache();
@@ -57,14 +70,18 @@ public class GradientPanel extends JPanel {
         }
     }
 
+    /*
+     * creating the gradient image cache
+     */
     private void createImageCache() {
-        int width = 2;
+        int width = 2;                  // it should not be widely, otherwise, enough for stretching the image
         int height = getHeight();
 
         if (height == 0) {
             return;
         }
 
+        // image caching paradigm. It should be as a rule for the big images, like a backgrounds.
         if (gradientImage == null ||
                 width != gradientImage.getWidth() ||
                 height != gradientImage.getHeight()) {
@@ -84,6 +101,9 @@ public class GradientPanel extends JPanel {
         }
     }
 
+    /*
+     * clear the image cache
+     */
     private void disposeImageCache() {
         synchronized (gradientImage) {
             gradientImage.flush();
@@ -91,6 +111,9 @@ public class GradientPanel extends JPanel {
         }
     }
 
+    /*
+     * The manager of the image cache instance. Call the image cache clear after the components hidden.
+     */
     private final class CacheManager extends ComponentAdapter {
         @Override
         public void componentHidden(ComponentEvent e) {

@@ -39,7 +39,11 @@ import java.awt.event.ActionListener;
 /**
  * @author apupeikis
  */
-public class AnimatedCurvesDemo extends JFrame {
+public class AnimatedCurvesDemo extends JFrame {s
+    /**
+     * The Demo instantiation. Just constructing our {@code JFrame} object instance and put the
+     * {@code TransitionPanel} as a content pane.
+     */
     public AnimatedCurvesDemo() throws HeadlessException {
         super("Animated Curves Demo");
         add(new TransitionPanel());
@@ -50,30 +54,41 @@ public class AnimatedCurvesDemo extends JFrame {
     }
 
 
+    /*
+     * The {@code TransitionPanel} those perform the animated transition process among two panels inside this container.
+     */
     private class TransitionPanel extends JPanel implements TransitionTarget {
-        private Animator animator;
-        private Animator curvesAnimator;
-        private ScreenTransition transition;
-        private IntroPanel introPanel;
-        private CurvesPanel curvesPanel;
-        private JPanel contentPanel;
-        private RoundButton startButton, stopButton;
+        private Animator animator;                      // transition animator
+        private Animator curvesAnimator;                // curves movement animator
+        private ScreenTransition transition;            // screen transition instance. we doing transitions!
+        private IntroPanel introPanel;                  // introduction panel
+        private CurvesPanel curvesPanel;                // panel with animated curves
+        private JPanel contentPanel;                    // 2nd panel, appeared after the 1st one
+        private RoundButton startButton, stopButton;    // buttons to start and stop the curves animation
 
+        /*
+         * Create the {@code TransitionPanel} instance
+         */
         private TransitionPanel() {
             setLayout(new BorderLayout());
-            animator = new Animator(1300);
-            animator.setAcceleration(.2f);
-            animator.setDeceleration(.4f);
+            animator = new Animator(1300);              // transition animator just a bit slow, no?
+            animator.setAcceleration(.2f);              // acceleration for the first 20%
+            animator.setDeceleration(.4f);              // deceleration for the last 40%
+            // here we go, the screen transition who is doing panel's transition job easier
             transition = new ScreenTransition(TransitionPanel.this, TransitionPanel.this, animator);
 
+            // setting up our introduction screen
             setupIntroductionScreen();
 
+            // transition handler animator, to perform the automatic transition between two panels
+            // after the first one finished his last animation
             Animator transitionHandler = new Animator(1000, new TimingTargetAdapter() {
                 @Override
                 public void end() {
                     transition.start();
                 }
             });
+            // automatically starting another animator after the first finished. timing based switch to another panel
             TimingTrigger.addTrigger(introPanel.getFinalAnimator(), transitionHandler, TimingTriggerEvent.STOP);
             buildResultScreen();
         }
@@ -83,14 +98,23 @@ public class AnimatedCurvesDemo extends JFrame {
             return new Dimension(640, 400);
         }
 
+        /*
+         * Setting up the introduction screen. The first panel.
+         */
         private void setupIntroductionScreen() {
             add(introPanel = new IntroPanel(), BorderLayout.CENTER);
         }
 
+        /*
+         * Setting up the result panel. the 2nd panel and the last one
+         */
         private void setupResultScreen() {
             add(contentPanel, BorderLayout.CENTER);
         }
 
+        /*
+         * Building our result panel
+         */
         private void buildResultScreen() {
             contentPanel = new JPanel(new StackLayout());
             GradientPanel gradientPanel = new GradientPanel();
@@ -111,11 +135,17 @@ public class AnimatedCurvesDemo extends JFrame {
             setupTriggers();
         }
 
+        /*
+         * Configuring the effects, used through the screen transition process
+         */
         private void setupEffect(final JComponent component) {
             FadeIn fader = new FadeIn();
             EffectsManager.setEffect(component, fader, EffectsManager.TransitionType.APPEARING);
         }
 
+        /*
+         * Setting up triggers on the buttons. The start button with infinite repetition.
+         */
         private void setupTriggers() {
             curvesAnimator = new Animator(1500, Animator.INFINITE,
                     Animator.RepeatBehavior.REVERSE, new CurvesAnimationHandler());
@@ -129,12 +159,19 @@ public class AnimatedCurvesDemo extends JFrame {
             });
         }
 
+        /**
+         * Method, those actually performs the animated transition and the next screen configuration
+         * {@inheritDoc}
+         */
         @Override
         public void setupNextScreen() {
             removeAll();
             setupResultScreen();
         }
 
+        /*
+         * Curves animation handler. Explanation is not necessarily
+         */
         private final class CurvesAnimationHandler extends TimingTargetAdapter {
             private final int minValue = 0;
             private final int maxValue = 50;
@@ -144,6 +181,7 @@ public class AnimatedCurvesDemo extends JFrame {
 
             @Override
             public void timingEvent(float fraction) {
+                // linear interpolation principal in action
                 int value = minValue + (int) (fraction * (float) (maxValue - minValue));
                 curvesPanel.setCounter(value);
             }

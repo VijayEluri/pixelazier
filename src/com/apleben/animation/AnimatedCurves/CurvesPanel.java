@@ -23,16 +23,26 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 
+/**
+ * The Animated {@code CurvesPanel}. Performing the simple curves animation process.
+ */
 public class CurvesPanel extends JPanel {
     private RenderingHints hints;
     private int counter = 0;
     private Color start = new Color(255, 255, 255, 200);
     private Color end = new Color(255, 255, 255, 0);
 
+    /**
+     * Creating the new instance of the {@code CurvesPanel}
+     */
     public CurvesPanel() {
         this(new BorderLayout());
     }
 
+    /**
+     * Creating the new instance of the {@code CurvesPanel}
+     * @param manager  the {@code LayoutManager} to instantiate with
+     */
     public CurvesPanel(LayoutManager manager) {
         super(manager);
         hints = createRenderingHints();
@@ -62,6 +72,10 @@ public class CurvesPanel extends JPanel {
         return false;
     }
 
+    /**
+     * Drawing our curves
+     * {@inheritDoc}
+     */
     @Override
     protected void paintComponent(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
