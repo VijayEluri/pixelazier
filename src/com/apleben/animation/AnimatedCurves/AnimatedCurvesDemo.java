@@ -39,7 +39,7 @@ import java.awt.event.ActionListener;
 /**
  * @author apupeikis
  */
-public class AnimatedCurvesDemo extends JFrame {s
+public class AnimatedCurvesDemo extends JFrame {
     /**
      * The Demo instantiation. Just constructing our {@code JFrame} object instance and put the
      * {@code TransitionPanel} as a content pane.
