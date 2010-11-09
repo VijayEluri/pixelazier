@@ -47,7 +47,7 @@ public class CryptoClassTool {
         EasyCipher cipher = new EasyCipher(privateKey);
         // generating the secret pass phrase with the public key
         final String passPhrase = cipher.encrypt(args[1]);
-        final int key = Integer.parseInt(passPhrase);
+        final int key = parseString(passPhrase);
 
         try {
             // Loads all class files found in the directory "inputDir"
@@ -59,14 +59,15 @@ public class CryptoClassTool {
                 public void walk(File path) throws IOException {
                     FileInputStream in = null;
                     FileOutputStream out = null;
+                    FileChannel channel = null;
                     try {
                         // constructing an out file with ".pinpuk" suffixes instead of ".class"
-                        String outFile = path.getPath() +
-                                path.getName().substring(0, path.getName().lastIndexOf('.')) +  ".pinpuk";
+                        String outFileName = path.getName().substring(0, path.getName().lastIndexOf('.')) +  ".pinpuk";
+                        String outFile = path.getParent() + "/" + outFileName;
 
                         in = new FileInputStream(path);
                         out = new FileOutputStream(outFile);
-                        FileChannel channel = in.getChannel();
+                        channel = in.getChannel();
 
                         int length = (int) channel.size();
                         MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, length);
@@ -81,6 +82,9 @@ public class CryptoClassTool {
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {
+                        if (channel != null) {
+                            channel.close();
+                        }
                         if (in != null) {
                             in.close();
                         }
@@ -94,5 +98,17 @@ public class CryptoClassTool {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
+    }
+
+    /*
+     * Dummies and naive string parsing into the integer value
+     */
+    private static int parseString(final String passPhrase) {
+        int result = 0;
+        for (int i = 0; i < passPhrase.length(); i++) {
+            int temp = (int) passPhrase.charAt(i);
+            result += temp;
+        }
+        return  result;
     }
 }

@@ -45,7 +45,7 @@ public class CryptoClassLoader extends ClassLoader {
         EasyCipher cipher = new EasyCipher(privateKey);
         // generating the secret pass phrase with the public key
         String passPhrase = cipher.encrypt(publicKey);
-        key = Integer.parseInt(passPhrase);
+        key = parseString(passPhrase);
     }
 
     protected Class<?> findClass(String name) throws ClassNotFoundException {
@@ -83,5 +83,17 @@ public class CryptoClassLoader extends ClassLoader {
         } finally {
             in.close();
         }
+    }
+
+    /*
+     * Dummies and naive string parsing into the integer value
+     */
+    private static int parseString(final String passPhrase) {
+        int result = 0;
+        for (int i = 0; i < passPhrase.length(); i++) {
+            int temp = (int) passPhrase.charAt(i);
+            result += temp;
+        }
+        return  result;
     }
 }
