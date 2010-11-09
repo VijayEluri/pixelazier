@@ -17,12 +17,12 @@
  * along with JavaPixelazier.  If not, see http://www.gnu.org/licenses/.
  */
 
-package com.apleben.cryptography;
+package com.apleben.cryptography.CryptoClassDemo;
 
+import com.apleben.io.tools.FileTreeWalk;
+import com.apleben.io.tools.FileTreeWalker;
+import com.apleben.io.tools.UnixGlobFileFilter;
 import com.apleben.utils.common.EasyCipher;
-import org.jdesktop.tools.io.FileTreeWalk;
-import org.jdesktop.tools.io.FileTreeWalker;
-import org.jdesktop.tools.io.UnixGlobFileFilter;
 
 import java.io.*;
 import java.nio.MappedByteBuffer;

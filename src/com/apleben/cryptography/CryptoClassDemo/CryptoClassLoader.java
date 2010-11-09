@@ -17,7 +17,7 @@
  * along with JavaPixelazier.  If not, see http://www.gnu.org/licenses/.
  */
 
-package com.apleben.cryptography;
+package com.apleben.cryptography.CryptoClassDemo;
 
 import com.apleben.utils.common.EasyCipher;
 

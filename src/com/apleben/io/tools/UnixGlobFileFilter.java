@@ -1,4 +1,4 @@
-package org.jdesktop.tools.io;
+package com.apleben.io.tools;
 
 import java.io.File;
 import java.io.FileFilter;
