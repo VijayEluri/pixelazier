@@ -20,10 +20,13 @@
 package com.apleben.cryptography;
 
 import com.apleben.utils.common.EasyCipher;
+import org.jdesktop.tools.io.FileTreeWalk;
+import org.jdesktop.tools.io.FileTreeWalker;
+import org.jdesktop.tools.io.UnixGlobFileFilter;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  * Encrypts a files in input directory using the custom ciphering algorithm.
@@ -34,28 +37,60 @@ public class CryptoClassTool {
     // the private key."legal protection insurance companies" from the German translate.
     private static final String privateKey = "Rechtsschutzversicherungsgesellschaften";
 
-    public static void main(String... args) {
-        if (args.length != 3) {
-            System.out.println("USAGE: java CryptoClassTool in out publicKey");
+    public static void main(final String... args) {
+        if (args.length != 2) {
+            System.out.println("USAGE: java CryptoClassTool inputDir publicKey");
             return;
         }
 
         // creating easy cipher with the private key
         EasyCipher cipher = new EasyCipher(privateKey);
         // generating the secret pass phrase with the public key
-        String passPhrase = cipher.encrypt(args[2]);
+        final String passPhrase = cipher.encrypt(args[1]);
+        final int key = Integer.parseInt(passPhrase);
 
         try {
-            FileInputStream in = new FileInputStream(args[0]);
-            FileOutputStream out = new FileOutputStream(args[1]);
-            int key = Integer.parseInt(passPhrase);
-            int ch;
-            while ((ch = in.read()) != -1) {
-                byte c = (byte) (ch + key);
-                out.write(c);
-            }
-            in.close();
-            out.close();
+            // Loads all class files found in the directory "inputDir"
+            File classDir = new File(args[0]);
+            FileTreeWalker walker = new FileTreeWalker(classDir,
+                    new UnixGlobFileFilter("*.class"));
+            walker.walk(new FileTreeWalk() {
+                @Override
+                public void walk(File path) throws IOException {
+                    FileInputStream in = null;
+                    FileOutputStream out = null;
+                    try {
+                        // constructing an out file with ".pinpuk" suffixes instead of ".class"
+                        String outFile = path.getPath() +
+                                path.getName().substring(0, path.getName().lastIndexOf('.')) +  ".pinpuk";
+
+                        in = new FileInputStream(path);
+                        out = new FileOutputStream(outFile);
+                        FileChannel channel = in.getChannel();
+
+                        int length = (int) channel.size();
+                        MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, length);
+
+                        for (int p = 0; p < length; p++) {
+                            int ch = buffer.get(p);
+                            byte c = (byte) (ch + key);
+                            out.write(c);
+                        }
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } finally {
+                        if (in != null) {
+                            in.close();
+                        }
+                        if (out != null) {
+                            out.close();
+                        }
+                    }
+                }
+            });
+
         } catch (IOException exception) {
             exception.printStackTrace();
         }
