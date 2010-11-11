@@ -1,0 +1,21 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="AnimatedCurves:jar">
+    <output-path>$PROJECT_DIR$/bin/AnimatedCurves</output-path>
+    <root id="archive" name="AnimatedCurves.jar">
+      <element id="directory" name="com">
+        <element id="directory" name="apleben">
+          <element id="directory" name="animation">
+            <element id="directory" name="AnimatedCurves">
+              <element id="dir-copy" path="$PROJECT_DIR$/out/production/JavaPixelazier/com/apleben/animation/AnimatedCurves" />
+            </element>
+          </element>
+          <element id="directory" name="swing">
+            <element id="directory" name="buttons">
+              <element id="dir-copy" path="$PROJECT_DIR$/out/production/JavaPixelazier/com/apleben/swing/buttons" />
+            </element>
+          </element>
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

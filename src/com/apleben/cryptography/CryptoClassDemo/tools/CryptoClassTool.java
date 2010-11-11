@@ -17,7 +17,7 @@
  * along with JavaPixelazier.  If not, see http://www.gnu.org/licenses/.
  */
 
-package com.apleben.cryptography.CryptoClassDemo;
+package com.apleben.cryptography.CryptoClassDemo.tools;
 
 import com.apleben.io.tools.FileTreeWalk;
 import com.apleben.io.tools.FileTreeWalker;
