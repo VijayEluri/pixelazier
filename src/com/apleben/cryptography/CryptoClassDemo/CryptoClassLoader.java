@@ -20,73 +20,168 @@
 package com.apleben.cryptography.CryptoClassDemo;
 
 import com.apleben.utils.common.EasyCipher;
+import sun.misc.Resource;
+import sun.misc.URLClassPath;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.security.*;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 /**
  * This class loader loads encrypted class files previously ciphered by the {@code CryptoClassTool}
  *
  * @author apupeikis
  */
-public class CryptoClassLoader extends ClassLoader {
+public class CryptoClassLoader extends URLClassLoader {
     // the private key."legal protection insurance companies" from the German translate.
     private static final String privateKey = "Rechtsschutzversicherungsgesellschaften";
     private final int key;
+
+    /* The search path for classes and resources */
+    private URLClassPath ucp;
+
+    /* The context to be used when loading classes and resources */
+    private AccessControlContext acc;
 
     /**
      * Constructs a crypto class loader.
      *
      * @param publicKey the decryption public key
+     * @param url the url of the jar file to load
      */
-    public CryptoClassLoader(final String publicKey) {
+    public CryptoClassLoader(final String publicKey, URL url) {
+        super(new URL [] {url});
         // creating easy cipher with the private key
         EasyCipher cipher = new EasyCipher(privateKey);
         // generating the secret pass phrase with the public key
         String passPhrase = cipher.encrypt(publicKey);
         key = parseString(passPhrase);
-    }
-
-    protected Class<?> findClass(String name) throws ClassNotFoundException {
-        byte[] classBytes;
-        try {
-            classBytes = loadClassBytes(name);
-        } catch (IOException e) {
-            throw new ClassNotFoundException(name);
-        }
-
-        Class<?> cl = defineClass(name, classBytes, 0, classBytes.length);
-        if (cl == null) throw new ClassNotFoundException(name);
-        return cl;
+        ucp = new URLClassPath(new URL [] {url});
+        acc = AccessController.getContext();
     }
 
     /**
-     * Loads and decrypt the class file bytes.
-     *
-     * @param name the class name
-     * @return an array with the class file bytes
-     * @throws java.io.IOException IO exception
+     * {@inheritDoc}
      */
-    private byte[] loadClassBytes(String name) throws IOException {
-        String cname = name.replace('.', '/') + ".pinpuk";
-        FileInputStream in = new FileInputStream(cname);
+    @SuppressWarnings("unchecked")
+    protected Class<?> findClass(final String name) throws ClassNotFoundException {
         try {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            int ch;
-            while ((ch = in.read()) != -1) {
-                byte b = (byte) (ch - key);
-                buffer.write(b);
-            }
-            in.close();
-            return buffer.toByteArray();
-        } finally {
-            in.close();
+            return (Class)
+                    AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                        public Object run() throws ClassNotFoundException {
+                            String path = name.replace('.', '/').concat(".pinpuk");
+                            Resource res = ucp.getResource(path, false);
+                            if (res != null) {
+                                try {
+                                    return defineClass(name, res);
+                                } catch (IOException e) {
+                                    throw new ClassNotFoundException(name, e);
+                                }
+                            } else {
+                                throw new ClassNotFoundException(name);
+                            }
+                        }
+                    }, acc);
+        } catch (PrivilegedActionException pae) {
+            throw (ClassNotFoundException) pae.getException();
         }
     }
 
     /*
-     * Dummies and naive string parsing into the integer value
+     * Defines and verifies a Class using the class bytes obtained from
+     * the specified Resource. The resulting Class must be resolved before
+     * it can be used. Also, loads and decrypt the class file bytes.
+     */
+    private Class defineClass(String name, Resource res) throws IOException {
+        int i = name.lastIndexOf('.');
+        URL url = res.getCodeSourceURL();
+        if (i != -1) {
+            String pkgname = name.substring(0, i);
+            // Check if package already loaded.
+            Package pkg = getPackage(pkgname);
+            Manifest man = res.getManifest();
+            if (pkg != null) {
+                // Package found, so check package sealing.
+                if (pkg.isSealed()) {
+                    // Verify that code source URL is the same.
+                    if (!pkg.isSealed(url)) {
+                        throw new SecurityException(
+                                "sealing violation: package " + pkgname + " is sealed");
+                    }
+
+                } else {
+                    // Make sure we are not attempting to seal the package
+                    // at this code source URL.
+                    if ((man != null) && isSealed(pkgname, man)) {
+                        throw new SecurityException(
+                                "sealing violation: can't seal package " + pkgname +
+                                        ": already loaded");
+                    }
+                }
+            } else {
+                if (man != null) {
+                    definePackage(pkgname, man, url);
+                } else {
+                    definePackage(pkgname, null, null, null, null, null, null, null);
+                }
+            }
+        }
+        // Now read the class bytes and define the class
+        byte[] bytes =  res.getBytes();
+        // NOTE: Must read certificates AFTER reading bytes above.
+        CodeSigner[] signers = res.getCodeSigners();
+        CodeSource cs = new CodeSource(url, signers);
+
+        byte[] tb;
+        ByteArrayInputStream is = null;
+        ByteArrayOutputStream os = null;
+        try {
+            is = new ByteArrayInputStream(bytes, 0, bytes.length);
+            os = new ByteArrayOutputStream();
+            int ch;
+            while ((ch = is.read()) != -1) {
+                byte b = (byte) (ch - key);
+                os.write(b);
+            }
+            tb = os.toByteArray();
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+            if (os != null) {
+                os.close();
+            }
+        }
+
+        return defineClass(name, tb, 0, tb.length, cs);
+    }
+
+    /*
+     * Returns true if the specified package name is sealed according to the
+     * given manifest.
+     */
+    private boolean isSealed(String name, Manifest man) {
+	String path = name.replace('.', '/').concat("/");
+	Attributes attr = man.getAttributes(path);
+	String sealed = null;
+	if (attr != null) {
+	    sealed = attr.getValue(Attributes.Name.SEALED);
+	}
+	if (sealed == null) {
+	    if ((attr = man.getMainAttributes()) != null) {
+		sealed = attr.getValue(Attributes.Name.SEALED);
+	    }
+	}
+	return "true".equalsIgnoreCase(sealed);
+    }
+
+    /*
+     * String parsing into the integer value
      */
     private static int parseString(final String passPhrase) {
         int result = 0;
