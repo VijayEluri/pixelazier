@@ -1,22 +1,3 @@
-/*
- * Copyright (c) 2010. Alexander Pupeikis
- *
- * This file is part of JavaPixelazier.
- *
- * JavaPixelazier is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JavaPixelazier is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with JavaPixelazier.  If not, see http://www.gnu.org/licenses/.
- */
-
 package com.apleben.cryptography.CryptoClassDemo;
 
 import com.apleben.utils.common.EasyCipher;
@@ -166,18 +147,18 @@ public class CryptoClassLoader extends URLClassLoader {
      * given manifest.
      */
     private boolean isSealed(String name, Manifest man) {
-	String path = name.replace('.', '/').concat("/");
-	Attributes attr = man.getAttributes(path);
-	String sealed = null;
-	if (attr != null) {
-	    sealed = attr.getValue(Attributes.Name.SEALED);
-	}
-	if (sealed == null) {
-	    if ((attr = man.getMainAttributes()) != null) {
-		sealed = attr.getValue(Attributes.Name.SEALED);
-	    }
-	}
-	return "true".equalsIgnoreCase(sealed);
+        String path = name.replace('.', '/').concat("/");
+        Attributes attr = man.getAttributes(path);
+        String sealed = null;
+        if (attr != null) {
+            sealed = attr.getValue(Attributes.Name.SEALED);
+        }
+        if (sealed == null) {
+            if ((attr = man.getMainAttributes()) != null) {
+                sealed = attr.getValue(Attributes.Name.SEALED);
+            }
+        }
+        return "true".equalsIgnoreCase(sealed);
     }
 
     /*

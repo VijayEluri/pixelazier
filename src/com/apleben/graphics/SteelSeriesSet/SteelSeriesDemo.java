@@ -1,22 +1,3 @@
-/*
- * Copyright (c) 2010. Alexander Pupeikis
- *
- * This file is part of JavaPixelazier.
- *
- * JavaPixelazier is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JavaPixelazier is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with JavaPixelazier.  If not, see http://www.gnu.org/licenses/.
- */
-
 package com.apleben.graphics.SteelSeriesSet;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -38,17 +19,17 @@ import java.util.List;
  * @author apupeikis
  */
 public class SteelSeriesDemo extends JFrame implements ActionListener {
-    private JComboBox frameDesign;
-    private JComboBox backgroundColor;
-    private JComboBox pointerColor;
-    private JComboBox lcdColor;
-    private JComboBox barValueColor;
-    private JCheckBox thresholdCB;
-    private JCheckBox maxMeasuredCB;
-    private JCheckBox sectionCB;
-    private JCheckBox trackSectionCB;
-    private JCheckBox animateCB;
-    private JSlider pointerSlider;
+    private JComboBox   frameDesign;
+    private JComboBox   backgroundColor;
+    private JComboBox   pointerColor;
+    private JComboBox   lcdColor;
+    private JComboBox   barValueColor;
+    private JCheckBox   thresholdCB;
+    private JCheckBox   maxMeasuredCB;
+    private JCheckBox   sectionCB;
+    private JCheckBox   trackSectionCB;
+    private JCheckBox   animateCB;
+    private JSlider     pointerSlider;
     private JTabbedPane gaugesPane;
 
     /**

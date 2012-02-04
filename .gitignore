@@ -1,1 +1,41 @@
+# use glob syntax
+syntax: glob
+*.class
+*~
+tags
+.lib
+*.bak
+*.off
+*.old
+.DS_Store
+
+# eclipse
+.settings
+.classpath
+.project
+.manager
+.externalToolBuilders
+
+# idea
+*.eml
+*.iml
+*.ipr
+*.iws
+.idea
+.idea_modules
+
+# ensime
+.ensime
+.scala_dependencies
+
+# build-processing
+target
+project/boot
+lib_managed
+src_managed
+project/plugins/project
 out
+null
+tmp*
+dist
+test-output
