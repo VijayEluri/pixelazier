@@ -1,4 +1,4 @@
-Java Pixelazier
+Pixelazier
 ======================
 
 The stub of sample applications with primary goal on Desktop, Swing, Graphics, static and dynamic effects,
